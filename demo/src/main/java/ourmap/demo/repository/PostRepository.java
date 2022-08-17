@@ -7,5 +7,6 @@ import ourmap.demo.entity.Post;
 
 @Repository
 public interface PostRepository extends JpaRepository<Post, Long> {
+    Post findByStoreName(String name);
 
 }
