@@ -9,8 +9,10 @@ import java.util.List;
 import java.util.Optional;
 
 public interface TipRepository extends JpaRepository<Tip, Long> {
-    @Query(value = "select * " +
-            "from Tip " +
-            "where post_id = :postId", nativeQuery = true)
-    List<Tip> findByPostID(@Param("postId") Long postId);
+//    @Query(value = "select * " +
+//            "from Tip " +
+//            "where post_id = :postId", nativeQuery = true)
+//    List<Tip> findByPostID(@Param("postId") Long postId);
+
+    List<Tip> findByPost_Id(@Param(value="postId") Long postId);
 }
