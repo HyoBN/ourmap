@@ -29,7 +29,7 @@ public class TipService {
         return tipRepository.findAll();
     }
 
-    public List<Tip> TipOfPost(Long postId) {
+    public List<Tip> findTipOfPost(Long postId) {
         return tipRepository.findByPost_Id(postId);
     }
-}[]
+}
