@@ -1,4 +1,4 @@
-package ourmap.demo.repository;
+package ourmap.demo.service;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;

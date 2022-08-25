@@ -12,6 +12,7 @@ import java.util.List;
 
 @SpringBootTest
 @Transactional
+//@Rollback(value = false)
 class PostTest {
 
     @PersistenceContext
@@ -53,7 +54,7 @@ class PostTest {
                 .getResultList();
         for (Tip tip : tips) {
             System.out.println("tip = " + tip);
-           // System.out.println(tip.getPost().getId());
+            System.out.println(tip.getPost().getId());
         }
     }
 }

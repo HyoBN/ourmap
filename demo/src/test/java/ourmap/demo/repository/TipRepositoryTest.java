@@ -3,13 +3,11 @@ package ourmap.demo.repository;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.annotation.Rollback;
 import org.springframework.transaction.annotation.Transactional;
 import ourmap.demo.entity.Post;
 import ourmap.demo.entity.Tip;
 
 import java.util.List;
-import java.util.Optional;
 
 @SpringBootTest
 @Transactional
@@ -50,7 +48,7 @@ public class TipRepositoryTest {
         for (Tip tip : tips) {
             System.out.println("tip = " + tip);
         }
-        List<Tip> post1Tips = tipRepository.findByPostID(post1.getId());
+        List<Tip> post1Tips = tipRepository.findByPost_Id(post1.getId());
         if(post1Tips==null || post1Tips.isEmpty())
             throw new IllegalArgumentException("It's NULL");
         for (Tip post1Tip : post1Tips) {
