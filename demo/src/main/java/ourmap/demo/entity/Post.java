@@ -8,7 +8,7 @@ import java.util.List;
 
 @Getter
 @Entity
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@NoArgsConstructor
 @ToString(of={"id","storeName"})
 public class Post {
 
@@ -18,12 +18,14 @@ public class Post {
     private Long id;
 
     private String storeName;
-    private String storeType; // 나중에 enum 으로 바꾸기.
+    @Enumerated(value = EnumType.STRING)
+    private StoreTypes storeType; // 나중에 enum 으로 바꾸기.
 
     @OneToMany(mappedBy = "post", cascade = CascadeType.PERSIST)
     private List<Tip> tips = new ArrayList<>();
 
-    public Post(String storeName) {
+    public Post(String storeName, StoreTypes storeType) {
         this.storeName = storeName;
+        this.storeType = storeType;
     }
 }

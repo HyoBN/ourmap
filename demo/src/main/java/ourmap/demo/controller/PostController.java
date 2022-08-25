@@ -5,6 +5,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import ourmap.demo.entity.Post;
+import ourmap.demo.entity.StoreTypes;
 import ourmap.demo.entity.Tip;
 import ourmap.demo.service.PostService;
 import ourmap.demo.service.TipService;
@@ -21,21 +22,23 @@ public class PostController {
     }
 
 
+    @ModelAttribute("storeTypes")
+    private StoreTypes[] storeTypes(){
+        return StoreTypes.values();
+    }
+
     @GetMapping("/newForm")
-    public String newPostPage(){
+    public String newPostPage(Model model) {
+        model.addAttribute("post", new Post());
         return "post/newForm";
     }
 
     @PostMapping("/newForm")
     public String newPost(PostForm form) {
-        // 나중에 storeType추가하기.
-        Post post = new Post(form.getStoreName());
-
+        Post post = new Post(form.getStoreName(), form.getStoreType());
         Tip tip = new Tip(post, form.getTip());
-
         tipService.upload(tip);
         postService.upload(post);
-        // tip 추가하는 것도 구현하기.
         return "redirect:/";
     }
 

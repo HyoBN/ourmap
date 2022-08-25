@@ -4,20 +4,14 @@
 <div class="container">
     <form action="/newForm" method="post">
         <div class="form-group">
-            <label for="storeName">제목</label>
+            <label for="storeName">가게명</label>
             <input type="text" id="storeName" name="storeName" placeholder="가게명을 입력하세요" required="required"></input>
 
             <p></p>
-            <label>종류</label>
-            <p></p>
-            <input type="radio" id="cafe" name="storeType" value="cafe">
-            <label for="cafe">카페</label><br>
-            <input type="radio" id="restaurant" name="storeType" value="restaurant">
-            <label for="restaurant">식당</label><br>
-            <input type="radio" id="bar" name="storeType" value="bar">
-            <label for="bar">술집</label><br>
-            <input type="radio" id="other" name="storeType" value="other">
-            <label for="other">기타</label>
+            <div th:each="type : ${storeTypes}">
+                <input type="radio" id="storeType" name="storeType" th:value="${type.name()}">
+                <label for="storeType" th:text="${type.description}"></label>
+            </div>
 
             <p></p>
             <input type="text" id="tip" name="tip" placeholder="tip을 입력하세요"></input>
