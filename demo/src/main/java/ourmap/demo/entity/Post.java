@@ -20,7 +20,7 @@ public class Post {
     private String storeName;
     private String storeType; // 나중에 enum 으로 바꾸기.
 
-    @OneToMany(mappedBy = "post")
+    @OneToMany(mappedBy = "post", cascade = CascadeType.PERSIST)
     private List<Tip> tips = new ArrayList<>();
 
     public Post(String storeName) {

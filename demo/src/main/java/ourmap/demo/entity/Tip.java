@@ -19,11 +19,11 @@ public class Tip {
 
     private String comment;
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.PERSIST)
     @JoinColumn(name = "post_id")
     private Post post;
 
-    public Tip(Post post,String comment) {
+    public Tip(Post post, String comment) {
         this.post = post;
         this.comment = comment;
     }
