@@ -1,5 +1,6 @@
 package ourmap.demo.controller;
 
+import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -10,8 +11,9 @@ import ourmap.demo.entity.Tip;
 import ourmap.demo.service.PostService;
 import ourmap.demo.service.TipService;
 
+import java.util.List;
+
 @Controller
-//@RequestMapping("/posts")
 public class PostController {
     private final PostService postService;
     private final TipService tipService;
@@ -25,6 +27,11 @@ public class PostController {
     @ModelAttribute("storeTypes")
     private StoreTypes[] storeTypes(){
         return StoreTypes.values();
+    }
+
+    @ModelAttribute("posts")
+    private List<Post> posts(){
+        return postService.findPosts();
     }
 
     @GetMapping("/newForm")
@@ -42,7 +49,16 @@ public class PostController {
         return "redirect:/";
     }
 
-    public void addTips(String tip) {
+    @GetMapping("/newComment")
+    public String newComment(){
+        return "redirect:/home";
+    }
+    @PostMapping("/newComment")
+    public String newComment(TipForm tip) {
+
+        Tip newTip = new Tip(postService.findPostById(tip.getPostId()), tip.getComment());
+        tipService.upload(newTip);
+        return "redirect:/";
 
     }
 
@@ -60,6 +76,7 @@ public class PostController {
     public String edit(){
         return "post/editForm";
     }
+
 
 
 

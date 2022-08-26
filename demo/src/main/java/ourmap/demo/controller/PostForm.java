@@ -3,6 +3,7 @@ package ourmap.demo.controller;
 import com.sun.istack.NotNull;
 import lombok.Getter;
 import lombok.Setter;
+import ourmap.demo.entity.StoreTypes;
 import ourmap.demo.entity.Tip;
 
 import java.util.ArrayList;
@@ -13,6 +14,6 @@ public class PostForm {
 
     @NotNull
     private String storeName;
-    private String storeType;
+    private StoreTypes storeType;
     private String tip;
 }

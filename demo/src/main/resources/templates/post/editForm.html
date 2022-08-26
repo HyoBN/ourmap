@@ -8,16 +8,10 @@
     <form th:action="${'/posts/modify/'+post.id}" method="post">
         <label for="name">가게명</label>
         <input type="text" id="name" name="name" th:value="${post.storeName}"></input>
-        <form>
-            <input type="radio" id="cafe" name="type" value="카페">
-            <label for="cafe">카페</label><br>
-            <input type="radio" id="restaurant" name="type" value="식당">
-            <label for="restaurant">식당</label><br>
-            <input type="radio" id="bar" name="type" value="술집">
-            <label for="bar">술집</label><br>
-            <input type="radio" id="other" name="type" value="기타">
-            <label for="other">기타</label>
-        </form>
+        <div th:each="type : ${storetype}">
+            <input type="radio" th:field="*{storetype}" th:value="${type.name()}">
+            <label th:for="${#ids.prev('type')}" th:text="${type.description}"></label>
+        </div>
 
         <div class="form-group">
             <button type="submit">완료</button>
