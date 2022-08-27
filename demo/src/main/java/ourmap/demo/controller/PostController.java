@@ -58,8 +58,7 @@ public class PostController {
 
         Tip newTip = new Tip(postService.findPostById(tip.getPostId()), tip.getComment());
         tipService.upload(newTip);
-        return "redirect:/";
-
+        return "redirect:/home";
     }
 
     @RequestMapping("/home")
@@ -87,19 +86,24 @@ public class PostController {
     }
 
 
-
-    //---------------------------------
-
-    @GetMapping("/{postId}/edit")
-    public String editForm(@PathVariable Long postId, Model model) {
+    @GetMapping("/edit/{postId}")
+    public String editForm(@PathVariable("postId") Long postId, Model model) {
         Post post = postService.findPostById(postId);
         model.addAttribute("post", post);
-        return "basic/editForm";
+        return "post/editForm";
     }
 
-    @PostMapping("/{postId}/edit")
-    public String edit(@PathVariable Long postId, @ModelAttribute Post post) {
+    @PostMapping("/edit/{postId}")
+    public String editPost(@PathVariable("postId") Long postId, @ModelAttribute Post post) {
         postService.upload(post);
-        return "redirect:/posts/{postId}";
+        return "redirect:/home";
+    }
+
+    @PostMapping("/deleteTip")
+    public String deleteTip(Long tipId) {
+
+        Long postId = tipService.findPostIdByTipId(tipId);
+        tipService.deleteTip(tipId);
+        return "redirect:/edit/"+postId;
     }
 }

@@ -20,11 +20,18 @@ public class TipService {
         return tip.getId();
     }
 
-    public Long deleteTip(Long id) {
+    public void deleteTip(Long id) {
         tipRepository.deleteById(id);
-        return id;
     }
 
+    public Tip findTipById(Long id) {
+        return tipRepository.findById(id).get();
+    }
+
+    public Long findPostIdByTipId(Long id) {
+        Tip tip = findTipById(id);
+        return tip.getPost().getId();
+    }
     public List<Tip> findTips(){
         return tipRepository.findAll();
     }

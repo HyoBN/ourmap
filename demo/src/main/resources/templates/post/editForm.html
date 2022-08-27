@@ -5,17 +5,26 @@
     <p>
         게시글 수정 페이지
     </p>
-    <form th:action="${'/posts/modify/'+post.id}" method="post">
+    <form id="form1" th:action="${'/edit/'+post.id}" method="post">
         <label for="name">가게명</label>
-        <input type="text" id="name" name="name" th:value="${post.storeName}"></input>
-        <div th:each="type : ${storetype}">
-            <input type="radio" th:field="*{storetype}" th:value="${type.name()}">
-            <label th:for="${#ids.prev('type')}" th:text="${type.description}"></label>
+        <input type="text" id="name" name="name" th:value="${post.storeName}" form="form1"></input>
+        <div th:each="type : ${storeTypes}">
+            <input type="radio" id="storeType" name="storeType" th:value="${type.name()}"
+            th:checked="${post.storeType==type}" form="form1">
+            <label for="storeType" th:text="${type.description}"></label>
         </div>
 
-        <div class="form-group">
-            <button type="submit">완료</button>
-        </div>
+        <ul th:each="tip : ${post.tips}" style="-webkit-padding-start:0px;">
+            <form id="form2" action="/deleteTip" method="post">
+            <li th:text="|• ${tip.comment}|" style="display:inline"/>
+            &nbsp
+
+                <input type="hidden" name="tipId" th:value="${tip.id}" form="form2"/>
+                <button type="submit" form="form2">XXX</button>
+            </form>
+
+        </ul>
+        <button type="submit" form="form1">완료</button>
     </form>
 </div> <!-- /container -->
 </body>
