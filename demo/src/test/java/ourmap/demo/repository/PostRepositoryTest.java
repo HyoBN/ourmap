@@ -3,8 +3,10 @@ package ourmap.demo.repository;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.annotation.Rollback;
 import org.springframework.transaction.annotation.Transactional;
 import ourmap.demo.entity.Post;
+import ourmap.demo.entity.StoreTypes;
 
 import java.util.List;
 
@@ -12,6 +14,8 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 @SpringBootTest
 @Transactional
+@Rollback(value = false)
+
 public class PostRepositoryTest {
 
     @Autowired
@@ -19,7 +23,7 @@ public class PostRepositoryTest {
 
     @Test
     public void testPost() {
-        Post post = new Post("postA");
+        Post post = new Post("postA", StoreTypes.CAFE);
         Post savedPost = postRepository.save(post);
 
         Post findPost = postRepository.findById(savedPost.getId()).get();
@@ -31,8 +35,8 @@ public class PostRepositoryTest {
 
     @Test
     public void basicCURD(){
-        Post post1 = new Post("탐앤탐스");
-        Post post2 = new Post(("맥도날드"));
+        Post post1 = new Post("탐앤탐스",StoreTypes.CAFE);
+        Post post2 = new Post("맥도날드",StoreTypes.CAFE);
         postRepository.save(post1);
         postRepository.save(post2);
 

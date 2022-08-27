@@ -5,6 +5,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.annotation.Transactional;
 import ourmap.demo.entity.Post;
+import ourmap.demo.entity.StoreTypes;
 import ourmap.demo.entity.Tip;
 import ourmap.demo.service.PostService;
 import ourmap.demo.service.TipService;
@@ -30,8 +31,8 @@ public class TipServiceTest {
     @Test
     public void testTip() throws Exception {
 
-        Post post1 = new Post("탐앤탐스");
-        Post post2 = new Post(("맥도날드"));
+        Post post1 = new Post("탐앤탐스", StoreTypes.CAFE);
+        Post post2 = new Post("맥도날드",StoreTypes.CAFE);
 
         postService.upload(post1);
         postService.upload(post2);

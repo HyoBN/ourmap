@@ -12,7 +12,7 @@ import java.util.List;
 
 @SpringBootTest
 @Transactional
-//@Rollback(value = false)
+@Rollback(value = false)
 class PostTest {
 
     @PersistenceContext
@@ -20,8 +20,8 @@ class PostTest {
 
     @Test
     public void testEntity(){
-        Post postA=new Post("kanna");
-        Post postB=new Post("ello");
+        Post postA=new Post("kanna",StoreTypes.CAFE);
+        Post postB=new Post("ello",StoreTypes.CAFE);
         em.persist(postA);
         em.persist(postB);
 
