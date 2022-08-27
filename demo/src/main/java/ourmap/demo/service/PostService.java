@@ -39,4 +39,8 @@ public class PostService {
     public Post findPostByName(String name){
         return postRepository.findByStoreName(name);
     }
+
+    public List<Post> findByNameContains(String name) {
+        return postRepository.findByStoreNameContains(name);
+    }
 }
