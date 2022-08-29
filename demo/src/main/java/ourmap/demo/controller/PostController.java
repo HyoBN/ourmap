@@ -94,14 +94,15 @@ public class PostController {
     }
 
     @PostMapping("/edit/{postId}")
-    public String editPost(@PathVariable("postId") Long postId, @ModelAttribute Post post) {
+    public String editPost(@PathVariable("postId") Long postId, PostForm form) {
+        Post post = new Post(postId, form.getStoreName(), form.getStoreType());
         postService.upload(post);
         return "redirect:/home";
     }
 
-    @PostMapping("/deleteTip")
-    public String deleteTip(Long tipId) {
-
+    @PostMapping("/deleteTip/{tipId}")
+    public String deleteTip(@PathVariable("tipId") Long tipId) {
+        System.out.println("tipId = " + tipId);
         Long postId = tipService.findPostIdByTipId(tipId);
         tipService.deleteTip(tipId);
         return "redirect:/edit/"+postId;
