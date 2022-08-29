@@ -7,25 +7,26 @@
     </p>
     <form id="form1" th:action="${'/edit/'+post.id}" method="post">
         <label for="name">가게명</label>
-        <input type="text" id="name" name="name" th:value="${post.storeName}" form="form1"></input>
+        <input type="hidden" name="postId" form="form1">
+        <input type="text" id="name" name="storeName" th:value="${post.storeName}" form="form1">
         <div th:each="type : ${storeTypes}">
             <input type="radio" id="storeType" name="storeType" th:value="${type.name()}"
             th:checked="${post.storeType==type}" form="form1">
             <label for="storeType" th:text="${type.description}"></label>
         </div>
-
-        <ul th:each="tip : ${post.tips}" style="-webkit-padding-start:0px;">
-            <form id="form2" action="/deleteTip" method="post">
-            <li th:text="|• ${tip.comment}|" style="display:inline"/>
-            &nbsp
-
-                <input type="hidden" name="tipId" th:value="${tip.id}" form="form2"/>
-                <button type="submit" form="form2">XXX</button>
-            </form>
-
-        </ul>
-        <button type="submit" form="form1">완료</button>
     </form>
-</div> <!-- /container -->
+
+
+    <ul th:each="tip,i : ${post.tips}" style="-webkit-padding-start:0px;">
+        <h3 th:text="${tip.id}"></h3>
+        <form th:id="'form'+${i}" th:action="${'/deleteTip/'+tip.id}" method="post">
+            <li th:text="|• ${tip.comment}|" style="display:inline"/>
+        &nbsp
+            <button type="submit" th:form="'form'+${i}">XXX</button>
+        </form>
+
+    </ul>
+        <button type="submit" form="form1">완료</button>
+</div>
 </body>
 </html>
