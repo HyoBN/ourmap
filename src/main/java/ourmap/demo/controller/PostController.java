@@ -46,17 +46,19 @@ public class PostController {
     }
 
     @PostMapping("/newForm")
-    public String newPost(PostForm form) {
+    public String newPost(PostForm form, Model model) {
+        MemberForm member = (MemberForm) httpSession.getAttribute("member");
+        model.addAttribute("userName", member.getName());
         Post post = new Post(form.getStoreName(), form.getStoreType());
         Tip tip = new Tip(post, form.getTip());
         tipService.upload(tip);
         postService.upload(post);
-        return "redirect:/";
+        return "redirect:/mainPage";
     }
 
     @GetMapping("/newComment")
     public String newComment(){
-        return "redirect:/home";
+        return "redirect:/basic/mainPage";
     }
 
     @PostMapping("/newComment")
@@ -64,7 +66,7 @@ public class PostController {
 
         Tip newTip = new Tip(postService.findPostById(tip.getPostId()), tip.getComment());
         tipService.upload(newTip);
-        return "redirect:/home";
+        return "redirect:/mainPage";
     }
 
     @GetMapping("/home")
@@ -83,8 +85,15 @@ public class PostController {
     @GetMapping("/mainPage")
     public String mainPage(Model model) {
         MemberForm member = (MemberForm) httpSession.getAttribute("member");
-        model.addAttribute("userName", member.getName());
-        return "basic/mainPage";
+        if(member!=null) {
+            model.addAttribute("userName", member.getName());
+            return "basic/mainPage";
+        }
+        else {
+            model.addAttribute("loginMessage", "로그인 후 사용가능합니다.");
+            return "index";
+        }
+
 
     }
 
@@ -103,7 +112,7 @@ public class PostController {
         List<Post> searchedPosts = postService.findByNameContains(name);
         // 검색 결과가 없을 시 message 전달, 출력 로직 추가하기.
         model.addAttribute("posts", searchedPosts);
-        return "basic/home";
+        return "basic/mainPage";
     }
 
 
@@ -118,7 +127,7 @@ public class PostController {
     public String editPost(@PathVariable("postId") Long postId, PostForm form) {
         Post post = new Post(postId, form.getStoreName(), form.getStoreType());
         postService.upload(post);
-        return "redirect:/home";
+        return "redirect:/mainPage";
     }
 
     @PostMapping("/deleteTip/{tipId}")
