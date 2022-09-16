@@ -80,6 +80,14 @@ public class PostController {
         }
     }
 
+    @GetMapping("/mainPage")
+    public String mainPage(Model model) {
+        MemberForm member = (MemberForm) httpSession.getAttribute("member");
+        model.addAttribute("userName", member.getName());
+        return "basic/mainPage";
+
+    }
+
     @RequestMapping("/test")
     public String test(){
         return "basic/test";
