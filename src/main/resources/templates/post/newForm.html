@@ -1,0 +1,24 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<body>
+<div class="container">
+    <form action="/newForm" method="post">
+        <div class="form-group">
+            <label for="storeName">가게명</label>
+            <input type="text" id="storeName" name="storeName" placeholder="가게명을 입력하세요" required="required"></input>
+
+            <p></p>
+            <div th:each="type : ${storeTypes}">
+                <input type="radio" id="storeType" name="storeType" th:value="${type.name()}">
+                <label for="storeType" th:text="${type.description}"></label>
+            </div>
+
+            <p></p>
+            <input type="text" id="tip" name="tip" placeholder="tip을 입력하세요"></input>
+
+        </div>
+        <button type="submit">등록</button>
+    </form>
+</div> <!-- /container -->
+</body>
+</html>

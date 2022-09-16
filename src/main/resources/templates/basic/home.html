@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <link rel="stylesheet" type="text/css" href="/css/bootstrap.css">
+
+  <meta charset="UTF-8">
+  <title>타이틀틀</title>
+  <style>
+    ul li {list-style-type: none; float:left; margin-left:20px;}
+
+</style>
+
+</head>
+<body>
+<div style="margin-top:50px;margin-bottom:100px">
+  <h1 align="center">The Private Map</h1>
+</div>
+<h3 th:text="${userName} "></h3>
+<!-- 검색 창 넣기-->
+
+<div style="margin-bottom:100px">
+  <ul>
+    <li>     <button class="typeButton" style="background:#FF9900;">카페</button>    </li>
+    <li>     <button class="typeButton" style="background:#FF6600;">식당</button>    </li>
+    <li>     <button class="typeButton" style="background:#66FFCC;">술집</button>    </li>
+    <li>     <button class="typeButton" style="background:#006699;">기타</button>    </li>
+  </ul>
+
+  <div style="margin-right:100px" align="right">
+    <a href="/newForm"> <button style="background:#009900; font-size:1.2em; color: #fff; border:none;">추가</button></a>
+    <form action="/searchByName" method="get">
+      <input type="text" style="font-size:18px" name="name" placeholder="가게명 검색">
+      <button type="submit" style="background:#666666; font-size:1.2em; color: #fff; border:none;">검색</button>
+    </form>
+
+  </div>
+
+</div>
+
+<div>
+  <ul th:each="post : ${posts}">
+    <li><div class="card card-body">
+      <span class="side-stick"></span>
+      <h2 th:text="${post.storeName}" style="text-align:center"/>
+      <div align="right">
+        <form th:action="${'/edit/'+post.id}" method="get">
+          <button type="submit" style="background:#666666; font-size:1em; color: #fff; border:none;">수정</button>
+        </form>
+      </div>
+
+      <div>
+        <ul th:each="tip : ${post.tips}" style="-webkit-padding-start:0px;">
+          <li th:text="|• ${tip.comment}|"></li><br>
+        </ul>
+        <form action="/newComment" method="post">
+          <input type="hidden" name="postId" th:value="${post.id}"/>
+          <input type="text" id="comment" name="comment" placeholder="comment 추가"/>
+          <button type="submit">추가</button>
+        </form>
+      </div>
+    </div>
+
+    </li>
+  </ul>
+
+</div>
+
+</body>
+</html>

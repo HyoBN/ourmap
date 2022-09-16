@@ -1,0 +1,37 @@
+.card {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    height: 350px;
+    width: 250px;
+    word-wrap: break-word;
+    background-color: #FFFF99;
+    background-clip: border-box;
+    border: 0 solid transparent;
+    margin-left: 25px;
+    margin-right: 25px;
+    margin-bottom: 80px;
+
+}
+.card-body {
+    flex: 1 1 auto;
+    padding: 10px;
+    padding-top:0px;
+
+}
+.typeButton {
+     color: #fff;
+     font-size:2em;
+     border:none;
+     border-radius:0.5em;
+     padding:5px
+}
+
+
+ .side-stick {
+     position: absolute;
+     width: 5px;
+     height: 35px;
+     left: 0;
+     background-color: rgba(82, 95, 127, .5)
+ }

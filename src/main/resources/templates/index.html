@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>타이틀틀</title>
+</head>
+<body>
+<ul>Ourmap
+    <li><a href="/editForm">수정페이지</a></li>
+    <li><a href="/home">홈페이지</a></li>
+    <li><a href="/newForm">new Form</a></li>
+
+</ul>
+<h3 th:text="${loginMessage}"></h3>
+<h3 th:text="${userName} "></h3>
+
+<a href="/oauth2/authorization/google" class="btn btn-sm btn-success active" role="button">Google Login</a><br>
+<a href="/oauth2/authorization/naver" class="btn btn-sm btn-success active" role="button">Naver Login</a><br>
+<a href="/oauth2/authorization/kakao" class="btn btn-third active" role="button">Kakao Login</a>
+
+</body>
+</html>
