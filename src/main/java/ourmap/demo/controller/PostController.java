@@ -20,7 +20,6 @@ import java.util.List;
 public class PostController {
     private final PostService postService;
     private final TipService tipService;
-
     private final HttpSession httpSession;
 
 //    public PostController(PostService postService, TipService tipService, HttpSession httpSession) {
