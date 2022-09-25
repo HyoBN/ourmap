@@ -39,4 +39,8 @@ public class TipService {
     public List<Tip> findTipOfPost(Long postId) {
         return tipRepository.findByPost_Id(postId);
     }
+
+    public List<Tip> findTipByWriter(Long writerId) {
+        return tipRepository.findByWriterId(writerId);
+    }
 }

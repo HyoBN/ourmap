@@ -43,4 +43,7 @@ public class PostService {
     public List<Post> findByNameContains(String name) {
         return postRepository.findByStoreNameContains(name);
     }
+
+    public List<Post> findByWriterId(Long writerId){
+        return postRepository.findByWriterId(writerId);}
 }

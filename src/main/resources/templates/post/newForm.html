@@ -9,12 +9,12 @@
 
             <p></p>
             <div th:each="type : ${storeTypes}">
-                <input type="radio" id="storeType" name="storeType" th:value="${type.name()}">
+                <input type="radio" id="storeType" name="storeType" th:value="${type.name()}" required="required">
                 <label for="storeType" th:text="${type.description}"></label>
             </div>
 
             <p></p>
-            <input type="text" id="tip" name="tip" placeholder="tip을 입력하세요"></input>
+            <input type="text" id="tip" name="tip" placeholder="tip을 입력하세요" required="required"></input>
 
         </div>
         <button type="submit">등록</button>

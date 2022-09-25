@@ -65,7 +65,7 @@ public class customOAuthService implements OAuth2UserService<OAuth2UserRequest, 
     private Member saveOrUpdate(MemberForm memberForm) {
 
         Member member = memberRepository.findByEmailAndProvider(memberForm.getEmail(), memberForm.getProvider())
-                .map(m -> m.update(memberForm.getName(), memberForm.getEmail())) // OAuth 서비스 사이트에서 유저 정보 변경이 있을 수 있기 때문에 우리 DB에도 update
+                .map(m -> m.update(memberForm.getName(), memberForm.getEmail())) // OAuth 서비스 사이트에서 유저 정보 변경이 있을 수 있기 때문에 DB에도 update
                 .orElse(memberForm.toMember());
 
         return memberRepository.save(member);

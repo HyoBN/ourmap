@@ -17,14 +17,16 @@ public class Tip {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String comment;
-
     @ManyToOne(cascade = CascadeType.PERSIST)
     @JoinColumn(name = "post_id")
     private Post post;
+    private String comment;
 
-    public Tip(Post post, String comment) {
+    private Long writerId;
+
+    public Tip(Post post, String comment, Long writerId) {
         this.post = post;
         this.comment = comment;
+        this.writerId=writerId;
     }
 }

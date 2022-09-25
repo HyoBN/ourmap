@@ -14,6 +14,8 @@ public class MemberForm {
     private String provider;
     private String nickname;
 
+
+    //Builder Pattern
     public Member toMember() {
         return Member.builder()
                 .name(name)

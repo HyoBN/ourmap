@@ -4,11 +4,11 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.context.annotation.RequestScope;
 import ourmap.demo.config.auth.MemberForm;
 import ourmap.demo.entity.Post;
 import ourmap.demo.entity.StoreTypes;
 import ourmap.demo.entity.Tip;
+import ourmap.demo.service.MemberService;
 import ourmap.demo.service.PostService;
 import ourmap.demo.service.TipService;
 
@@ -20,6 +20,9 @@ import java.util.List;
 public class PostController {
     private final PostService postService;
     private final TipService tipService;
+
+    private final MemberService memberService;
+
     private final HttpSession httpSession;
 
 //    public PostController(PostService postService, TipService tipService, HttpSession httpSession) {
@@ -49,8 +52,9 @@ public class PostController {
     public String newPost(PostForm form, Model model) {
         MemberForm member = (MemberForm) httpSession.getAttribute("member");
         model.addAttribute("userName", member.getName());
-        Post post = new Post(form.getStoreName(), form.getStoreType());
-        Tip tip = new Tip(post, form.getTip());
+
+        Post post = new Post(form.getStoreName(), form.getStoreType(), memberService.findMemberId(member.getEmail(), member.getProvider()));
+        Tip tip = new Tip(post, form.getTip(), memberService.findMemberId(member.getEmail(), member.getProvider()));
         tipService.upload(tip);
         postService.upload(post);
         return "redirect:/mainPage";
@@ -63,8 +67,8 @@ public class PostController {
 
     @PostMapping("/newComment")
     public String newComment(TipForm tip) {
-
-        Tip newTip = new Tip(postService.findPostById(tip.getPostId()), tip.getComment());
+        MemberForm member = (MemberForm) httpSession.getAttribute("member");
+        Tip newTip = new Tip(postService.findPostById(tip.getPostId()), tip.getComment(),memberService.findMemberId(member.getEmail(), member.getProvider()));
         tipService.upload(newTip);
         return "redirect:/mainPage";
     }
@@ -125,7 +129,8 @@ public class PostController {
 
     @PostMapping("/edit/{postId}")
     public String editPost(@PathVariable("postId") Long postId, PostForm form) {
-        Post post = new Post(postId, form.getStoreName(), form.getStoreType());
+        MemberForm member = (MemberForm) httpSession.getAttribute("member");
+        Post post = new Post(postId, form.getStoreName(), form.getStoreType(),memberService.findMemberId(member.getEmail(), member.getProvider()));
         postService.upload(post);
         return "redirect:/mainPage";
     }

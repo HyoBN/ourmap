@@ -22,18 +22,21 @@ public class Post {
     private String storeName;
     @Enumerated(value = EnumType.STRING)
     private StoreTypes storeType; // 나중에 enum 으로 바꾸기.
+    private Long writerId;
 
     @OneToMany(mappedBy = "post", cascade = CascadeType.PERSIST)
     private List<Tip> tips = new ArrayList<>();
 
-    public Post(String storeName, StoreTypes storeType) {
+    public Post(String storeName, StoreTypes storeType, Long writerId) {
         this.storeName = storeName;
         this.storeType = storeType;
+        this.writerId = writerId;
     }
 
-    public Post(Long postId, String storeName, StoreTypes storeType) {
+    public Post(Long postId, String storeName, StoreTypes storeType, Long writerId) {
         this.id=postId;
         this.storeName = storeName;
         this.storeType = storeType;
+        this.writerId = writerId;
     }
 }
