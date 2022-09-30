@@ -19,13 +19,17 @@
 <button type="button" onclick="location.href='/logout' ">로그아웃</button>
 <!-- 검색 창 넣기-->
 
+
+
 <div style="margin-bottom:100px">
-  <ul>
-    <li>     <button class="typeButton" style="background:#FF9900;">카페</button>    </li>
-    <li>     <button class="typeButton" style="background:#FF6600;">식당</button>    </li>
-    <li>     <button class="typeButton" style="background:#66FFCC;">술집</button>    </li>
-    <li>     <button class="typeButton" style="background:#006699;">기타</button>    </li>
-  </ul>
+
+  <div th:each="type : ${storeTypes}">
+    <ul>
+    <li> <button class="typeButton" th:style="|background:${type.color};|" th:value="${type.name()}" th:text="${type.description}"></button>
+    </li>
+    </ul>
+  </div>
+
 
   <div style="margin-right:100px" align="right">
     <a href="/newForm"> <button style="background:#009900; font-size:1.2em; color: #fff; border:none;">추가</button></a>
