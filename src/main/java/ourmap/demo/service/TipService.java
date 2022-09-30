@@ -25,7 +25,7 @@ public class TipService {
     }
 
     public Tip findTipById(Long id) {
-        return tipRepository.findById(id).get();
+            return tipRepository.findById(id).get();
     }
 
     public Long findPostIdByTipId(Long id) {

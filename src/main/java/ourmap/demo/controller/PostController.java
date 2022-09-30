@@ -119,7 +119,6 @@ public class PostController {
         return "basic/mainPage";
     }
 
-
     @GetMapping("/edit/{postId}")
     public String editForm(@PathVariable("postId") Long postId, Model model) {
         Post post = postService.findPostById(postId);
@@ -136,10 +135,24 @@ public class PostController {
     }
 
     @PostMapping("/deleteTip/{tipId}")
-    public String deleteTip(@PathVariable("tipId") Long tipId) {
+    public String deleteTip(@PathVariable("tipId") Long tipId, Long postId, Model model) {
+        MemberForm member = (MemberForm) httpSession.getAttribute("member");
+
+        Long sessionId = memberService.findMemberId(member.getEmail(), member.getProvider());
+        Long writerId = (tipService.findTipById(tipId)).getWriterId();
+
+        model.addAttribute(postService.findPostById(postId));
+
+        if (sessionId.equals(writerId)) {
+            System.out.println("두 값은 동일합니다.");
+            tipService.deleteTip(tipId);
+        }
+        else {
+            model.addAttribute("deniedMessage", "자신이 작성한 tip만 삭제 가능합니다!");
+            System.out.println("디나이됨.");
+        }
+
         System.out.println("tipId = " + tipId);
-        Long postId = tipService.findPostIdByTipId(tipId);
-        tipService.deleteTip(tipId);
-        return "redirect:/edit/"+postId;
+        return "post/editForm";
     }
 }

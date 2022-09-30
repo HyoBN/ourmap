@@ -17,4 +17,6 @@ public interface TipRepository extends JpaRepository<Tip, Long> {
     List<Tip> findByPost_Id(@Param(value="postId") Long postId);
 
     List<Tip> findByWriterId(Long writerId);
+
+    Optional<Tip> findById(Long tipId);
 }

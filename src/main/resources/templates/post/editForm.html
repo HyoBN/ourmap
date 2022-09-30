@@ -16,15 +16,16 @@
         </div>
     </form>
 
-
+    <h3 th:text="${deniedMessage} "></h3>
     <ul th:each="tip,i : ${post.tips}" style="-webkit-padding-start:0px;">
         <h3 th:text="${tip.id}"></h3>
         <form th:id="'form'+${i}" th:action="${'/deleteTip/'+tip.id}" method="post">
             <li th:text="|• ${tip.comment}|" style="display:inline"/>
+
         &nbsp
+            <input type="hidden" name="postId" th:value="${post.id}"/>
             <button type="submit" th:form="'form'+${i}">XXX</button>
         </form>
-
     </ul>
         <button type="submit" form="form1">완료</button>
 </div>
