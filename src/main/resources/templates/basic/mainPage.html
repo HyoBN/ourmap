@@ -23,10 +23,15 @@
 
 <div style="margin-bottom:100px">
 
-  <div th:each="type : ${storeTypes}">
-    <ul>
-    <li> <button class="typeButton" th:style="|background:${type.color};|" th:value="${type.name()}" th:text="${type.description}"></button>
-    </li>
+  <div>
+    <ul th:each="type,i : ${storeTypes}">
+      <form th:id="'form'+${i}" action="/sortByCategory" method="get">
+        <li>
+          <input type="hidden" name="category" th:value="${type.name}"/>
+          <button class="typeButton" type="submit" th:style="|background:${type.color};|"
+                     th:value="${type.name()}" th:text="${type.description}"></button></li>
+      </form>
+
     </ul>
   </div>
 
@@ -34,7 +39,7 @@
   <div style="margin-right:100px" align="right">
     <a href="/newForm"> <button style="background:#009900; font-size:1.2em; color: #fff; border:none;">추가</button></a>
     <form action="/searchByName" method="get">
-      <input type="text" style="font-size:18px" name="name" placeholder="가게명 검색">
+      <input type ="text" style="font-size:18px" name="name" placeholder="가게명 검색">
       <button type="submit" style="background:#666666; font-size:1.2em; color: #fff; border:none;">검색</button>
     </form>
 

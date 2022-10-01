@@ -111,10 +111,27 @@ public class PostController {
         return "post/editForm";
     }
 
+    @GetMapping("/sortByCategory")
+    public String categorySort(String category, Model model) {
+        System.out.println("######category = " + category);
+
+        MemberForm member = (MemberForm) httpSession.getAttribute("member");
+        List<Post> categoryPosts = postService.findByStoreType(category);
+        for (Post categoryPost : categoryPosts) {
+            System.out.println("categoryPost.getStoreName() = " + categoryPost.getStoreName());
+
+        }
+        model.addAttribute("userName", member.getName());
+        model.addAttribute("posts", categoryPosts);
+        return "basic/mainPage";
+    }
+
     @GetMapping("/searchByName")
     public String search(String name, Model model) {
+        MemberForm member = (MemberForm) httpSession.getAttribute("member");
         List<Post> searchedPosts = postService.findByNameContains(name);
         // 검색 결과가 없을 시 message 전달, 출력 로직 추가하기.
+        model.addAttribute("userName", member.getName());
         model.addAttribute("posts", searchedPosts);
         return "basic/mainPage";
     }

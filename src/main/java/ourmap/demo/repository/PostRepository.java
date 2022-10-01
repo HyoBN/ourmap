@@ -1,8 +1,10 @@
 package ourmap.demo.repository;
 
+import org.springframework.boot.autoconfigure.session.StoreType;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 import ourmap.demo.entity.Post;
+import ourmap.demo.entity.StoreTypes;
 
 import java.util.List;
 
@@ -14,5 +16,7 @@ public interface PostRepository extends JpaRepository<Post, Long> {
     List<Post> findByStoreNameContains(String name);
 
     List<Post> findByWriterId(Long writerId);
+
+    List<Post> findByStoreType(StoreTypes type);
 
 }
