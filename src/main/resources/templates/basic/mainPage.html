@@ -23,6 +23,11 @@
 
 <div style="margin-bottom:100px">
 
+  <div style="float:left;">
+    <form action="/mainPage" method="get">
+      <button class="typeButton" type="submit" style="background:#CC00CC;">전체</button>
+    </form>
+  </div>
   <div>
     <ul th:each="type,i : ${storeTypes}">
       <form th:id="'form'+${i}" action="/sortByCategory" method="get">
