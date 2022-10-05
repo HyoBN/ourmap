@@ -7,9 +7,7 @@
   <title>타이틀틀</title>
   <style>
     ul li {list-style-type: none; float:left; margin-left:20px;}
-
 </style>
-
 </head>
 <body>
 <div style="margin-top:50px;margin-bottom:100px">
@@ -40,22 +38,20 @@
     </ul>
   </div>
 
-
   <div style="margin-right:100px" align="right">
     <a href="/newForm"> <button style="background:#009900; font-size:1.2em; color: #fff; border:none;">추가</button></a>
     <form action="/searchByName" method="get">
       <input type ="text" style="font-size:18px" name="name" placeholder="가게명 검색">
       <button type="submit" style="background:#666666; font-size:1.2em; color: #fff; border:none;">검색</button>
     </form>
-
   </div>
-
 </div>
 
 <div>
   <ul th:each="post : ${posts}">
     <li><div class="card card-body">
-      <span class="side-stick"></span>
+      <span class="side-stick" th:style="|background:${post.storeType.color};|"></span>
+
       <h2 th:text="${post.storeName}" style="text-align:center"/>
       <div align="right">
         <form th:action="${'/edit/'+post.id}" method="get">
@@ -74,11 +70,8 @@
         </form>
       </div>
     </div>
-
     </li>
   </ul>
-
 </div>
-
 </body>
 </html>
