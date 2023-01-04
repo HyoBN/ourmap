@@ -20,6 +20,7 @@ public class MemberForm {
         return Member.builder()
                 .name(name)
                 .email(email)
+                .nickname(name)
                 .provider(provider)
                 .build();
     }
