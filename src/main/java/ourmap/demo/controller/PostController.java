@@ -20,17 +20,8 @@ import java.util.List;
 public class PostController {
     private final PostService postService;
     private final TipService tipService;
-
     private final MemberService memberService;
-
     private final HttpSession httpSession;
-
-//    public PostController(PostService postService, TipService tipService, HttpSession httpSession) {
-//        this.postService=postService;
-//        this.tipService=tipService;
-//        this.httpSession = httpSession;
-//    }
-
 
     @ModelAttribute("storeTypes")
     private StoreTypes[] storeTypes(){
@@ -73,39 +64,6 @@ public class PostController {
         return "redirect:/mainPage";
     }
 
-    @GetMapping("/home")
-    public String home(Model model){
-        MemberForm member = (MemberForm) httpSession.getAttribute("member");
-
-        if(member!=null) {
-            model.addAttribute("userName", member.getName());
-            return "basic/home";
-        } else {
-            model.addAttribute("loginMessage", "로그인 후 사용가능합니다.");
-            return "index";
-        }
-    }
-
-    @GetMapping("/mainPage")
-    public String mainPage(Model model) {
-        MemberForm member = (MemberForm) httpSession.getAttribute("member");
-        if(member!=null) {
-            model.addAttribute("userName", member.getName());
-            return "basic/mainPage";
-        }
-        else {
-            model.addAttribute("loginMessage", "로그인 후 사용가능합니다.");
-            return "index";
-        }
-
-
-    }
-
-    @RequestMapping("/test")
-    public String test(){
-        return "basic/test";
-    }
-
     @RequestMapping("/editForm")
     public String edit(){
         return "post/editForm";
@@ -113,14 +71,9 @@ public class PostController {
 
     @GetMapping("/sortByCategory")
     public String categorySort(String category, Model model) {
-        System.out.println("######category = " + category);
-
         MemberForm member = (MemberForm) httpSession.getAttribute("member");
         List<Post> categoryPosts = postService.findByStoreType(category);
-        for (Post categoryPost : categoryPosts) {
-            System.out.println("categoryPost.getStoreName() = " + categoryPost.getStoreName());
 
-        }
         model.addAttribute("userName", member.getName());
         model.addAttribute("posts", categoryPosts);
         return "basic/mainPage";
@@ -152,24 +105,18 @@ public class PostController {
     }
 
     @PostMapping("/deleteTip/{tipId}")
-    public String deleteTip(@PathVariable("tipId") Long tipId, Long postId, Model model) {
-        MemberForm member = (MemberForm) httpSession.getAttribute("member");
-
-        Long sessionId = memberService.findMemberId(member.getEmail(), member.getProvider());
-        Long writerId = (tipService.findTipById(tipId)).getWriterId();
+        public String deleteTip(@PathVariable("tipId") Long tipId, Long postId, Model model) {
+            MemberForm member = (MemberForm) httpSession.getAttribute("member");
+            Long sessionId = memberService.findMemberId(member.getEmail(), member.getProvider());
+            Long writerId = (tipService.findTipById(tipId)).getWriterId();
 
         model.addAttribute(postService.findPostById(postId));
 
         if (sessionId.equals(writerId)) {
-            System.out.println("두 값은 동일합니다.");
             tipService.deleteTip(tipId);
-        }
-        else {
+        } else {
             model.addAttribute("deniedMessage", "자신이 작성한 tip만 삭제 가능합니다!");
-            System.out.println("디나이됨.");
         }
-
-        System.out.println("tipId = " + tipId);
         return "post/editForm";
     }
 }
