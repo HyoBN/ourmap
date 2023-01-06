@@ -40,7 +40,7 @@ public class customOAuthService implements OAuth2UserService<OAuth2UserRequest, 
         MemberForm memberForm = OAuthAttributes.extract(registrationId, attributes); // registrationId에 따라 유저 정보를 통해 공통된 UserProfile 객체로 만들어 줌
         memberForm.setProvider(registrationId);
         Member member = saveOrUpdate(memberForm);
-
+        memberForm.setNickname(member.getNickname());
         httpSession.setAttribute("member", memberForm); // member로 넘기면 id가 노출되니까 memberProfile로 세션 넘김.
 
         Map<String, Object> customAttribute = customAttribute(attributes, userNameAttributeName, memberForm, registrationId);
