@@ -1,8 +1,6 @@
 package ourmap.demo.entity;
 
-import com.sun.istack.NotNull;
 import lombok.*;
-
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -18,10 +16,9 @@ public class Post {
     @Column(name="post_id")
     private Long id;
 
-    //@NotNull     에러해결하고 나중에 붙이기.
     private String storeName;
     @Enumerated(value = EnumType.STRING)
-    private StoreTypes storeType; // 나중에 enum 으로 바꾸기.
+    private StoreTypes storeType;
     private Long writerId;
 
     @OneToMany(mappedBy = "post", cascade = CascadeType.PERSIST)

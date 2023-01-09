@@ -18,5 +18,4 @@ public interface PostRepository extends JpaRepository<Post, Long> {
     List<Post> findByWriterId(Long writerId);
 
     List<Post> findByStoreType(StoreTypes type);
-
 }

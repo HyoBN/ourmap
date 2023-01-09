@@ -30,12 +30,11 @@ public class HomeController {
         return StoreTypes.values();
     }
 
-//    @ModelAttribute("userNickname")
-//    private String userNickname(){
-//        MemberForm member = (MemberForm) httpSession.getAttribute("member");
-//        String nickname = memberService.findNicknameByMemberForm(member);
-//        return nickname;
-//    }
+    @ModelAttribute("userNickname")
+    private String userNickname(){
+        MemberForm member = (MemberForm) httpSession.getAttribute("member");
+        return member.getNickname();
+    }
 
     @ModelAttribute("posts")
     private List<Post> posts(){
@@ -46,11 +45,8 @@ public class HomeController {
     public String mainPage(Model model) {
         MemberForm member = (MemberForm) httpSession.getAttribute("member");
         if(member!=null) {
-            String nickname = memberService.findNicknameByMemberForm(member);
-            model.addAttribute("userNickname", nickname);
             return "basic/mainPage";
-        }
-        else {
+        } else {
             model.addAttribute("loginMessage", "로그인 후 사용가능합니다.");
             return "index";
         }
@@ -60,22 +56,18 @@ public class HomeController {
     public String changeNickname(Model model){
         MemberForm member = (MemberForm) httpSession.getAttribute("member");
         if(member!=null) {
-            String nickname = memberService.findNicknameByMemberForm(member);
-            model.addAttribute("userNickname", nickname);
             return "basic/changeNicknamePage";
-        }
-        else {
+        } else {
             model.addAttribute("loginMessage", "로그인 후 사용가능합니다.");
             return "index";
         }
     }
 
     private boolean isNotBlank(String str) {
-        int len=str.length();
-        if (str == null || len == 0) {
+        if (str == null || str.length() == 0) {
             return false;
         }
-        for (int i = 0; i < len; i++) {
+        for (int i = 0; i < str.length(); i++) {
             if ((Character.isWhitespace(str.charAt(i)))) {
                 return false;
             }
@@ -85,32 +77,27 @@ public class HomeController {
     @PostMapping("/newNickname")
     public String newNickname(String nickname, Model model){
         MemberForm member = (MemberForm) httpSession.getAttribute("member");
-        String userNickname = memberService.findNicknameByMemberForm(member);
+        String userNickname = member.getNickname();
         if(!isNotBlank(nickname)){
-            model.addAttribute("userNickname", userNickname);
             model.addAttribute("checkMessage", "공백을 포함할 수 없습니다.");
             return "basic/changeNicknamePage";
-        }
-        else if(memberService.IsSameNickname(nickname)){
-            model.addAttribute("userNickname", userNickname);
+        } else if(memberService.IsSameNickname(nickname)){
             model.addAttribute("checkMessage", "이미 존재하는 닉네임입니다.");
             return "basic/changeNicknamePage";
-        }
-        else{
+        } else{
             Member updateMember = memberService.findMemberByEmailAndProvider(member.getEmail(), member.getProvider());
             updateMember.updateNickname(nickname);
             memberService.updateMemberInfo(updateMember);
-            model.addAttribute("userNickname", nickname);
-            return "basic/home";
+            MemberForm memberForm = new MemberForm(updateMember);
+            httpSession.setAttribute("member",memberForm);
+            return "redirect:/home";
         }
     }
 
     @GetMapping("/home")
     public String home(Model model){
         MemberForm member = (MemberForm) httpSession.getAttribute("member");
-        String userNickname = memberService.findNicknameByMemberForm(member);
         if(member!=null) {
-            model.addAttribute("userNickname", userNickname);
             return "basic/home";
         } else {
             model.addAttribute("loginMessage", "로그인 후 사용가능합니다.");

@@ -32,6 +32,11 @@ public class PostController {
     private List<Post> posts(){
         return postService.findPosts();
     }
+    @ModelAttribute("userNickname")
+    private String userNickname(){
+        MemberForm member = (MemberForm) httpSession.getAttribute("member");
+        return member.getNickname();
+    }
 
     @GetMapping("/newForm")
     public String newPostPage(Model model) {
@@ -42,10 +47,10 @@ public class PostController {
     @PostMapping("/newForm")
     public String newPost(PostForm form, Model model) {
         MemberForm member = (MemberForm) httpSession.getAttribute("member");
-        model.addAttribute("userName", member.getName());
+        //model.addAttribute("userName", member.getName());
 
-        Post post = new Post(form.getStoreName(), form.getStoreType(), memberService.findMemberId(member.getEmail(), member.getProvider()));
-        Tip tip = new Tip(post, form.getTip(), memberService.findMemberId(member.getEmail(), member.getProvider()));
+        Post post = new Post(form.getStoreName(), form.getStoreType(), memberService.findMemberIdByEmailAndProvider(member.getEmail(), member.getProvider()));
+        Tip tip = new Tip(post, form.getTip(), memberService.findMemberIdByEmailAndProvider(member.getEmail(), member.getProvider()));
         tipService.upload(tip);
         postService.upload(post);
         return "redirect:/mainPage";
@@ -59,7 +64,7 @@ public class PostController {
     @PostMapping("/newComment")
     public String newComment(TipForm tip) {
         MemberForm member = (MemberForm) httpSession.getAttribute("member");
-        Tip newTip = new Tip(postService.findPostById(tip.getPostId()), tip.getComment(),memberService.findMemberId(member.getEmail(), member.getProvider()));
+        Tip newTip = new Tip(postService.findPostById(tip.getPostId()), tip.getComment(),memberService.findMemberIdByEmailAndProvider(member.getEmail(), member.getProvider()));
         tipService.upload(newTip);
         return "redirect:/mainPage";
     }
@@ -73,8 +78,6 @@ public class PostController {
     public String categorySort(String category, Model model) {
         MemberForm member = (MemberForm) httpSession.getAttribute("member");
         List<Post> categoryPosts = postService.findByStoreType(category);
-
-        model.addAttribute("userName", member.getName());
         model.addAttribute("posts", categoryPosts);
         return "basic/mainPage";
     }
@@ -84,7 +87,6 @@ public class PostController {
         MemberForm member = (MemberForm) httpSession.getAttribute("member");
         List<Post> searchedPosts = postService.findByNameContains(name);
         // 검색 결과가 없을 시 message 전달, 출력 로직 추가하기.
-        model.addAttribute("userName", member.getName());
         model.addAttribute("posts", searchedPosts);
         return "basic/mainPage";
     }
@@ -99,16 +101,16 @@ public class PostController {
     @PostMapping("/edit/{postId}")
     public String editPost(@PathVariable("postId") Long postId, PostForm form) {
         MemberForm member = (MemberForm) httpSession.getAttribute("member");
-        Post post = new Post(postId, form.getStoreName(), form.getStoreType(),memberService.findMemberId(member.getEmail(), member.getProvider()));
+        Post post = new Post(postId, form.getStoreName(), form.getStoreType(),memberService.findMemberIdByEmailAndProvider(member.getEmail(), member.getProvider()));
         postService.upload(post);
         return "redirect:/mainPage";
     }
 
     @PostMapping("/deleteTip/{tipId}")
-        public String deleteTip(@PathVariable("tipId") Long tipId, Long postId, Model model) {
-            MemberForm member = (MemberForm) httpSession.getAttribute("member");
-            Long sessionId = memberService.findMemberId(member.getEmail(), member.getProvider());
-            Long writerId = (tipService.findTipById(tipId)).getWriterId();
+    public String deleteTip(@PathVariable("tipId") Long tipId, Long postId, Model model) {
+        MemberForm member = (MemberForm) httpSession.getAttribute("member");
+        Long sessionId = memberService.findMemberIdByEmailAndProvider(member.getEmail(), member.getProvider());
+        Long writerId = (tipService.findTipById(tipId)).getWriterId();
 
         model.addAttribute(postService.findPostById(postId));
 

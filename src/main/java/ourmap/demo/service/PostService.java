@@ -1,5 +1,4 @@
 package ourmap.demo.service;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import ourmap.demo.entity.Post;
@@ -11,7 +10,6 @@ import java.util.List;
 //@RequiredArgsConstructor
 public class PostService {
     private final PostRepository postRepository;
-
     @Autowired
     public PostService(PostRepository postRepository) {
         this.postRepository = postRepository;
@@ -21,7 +19,6 @@ public class PostService {
         postRepository.save(post);
         return post.getId();
     }
-
     public Long deletePost(Long id) {
         postRepository.deleteById(id);
         return id;

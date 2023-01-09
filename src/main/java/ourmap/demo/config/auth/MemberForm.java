@@ -15,6 +15,13 @@ public class MemberForm {
     private String nickname;
 
 
+    public MemberForm(Member member) {
+        this.setName(member.getName());
+        this.setProvider(member.getProvider());
+        this.setEmail(member.getEmail());
+        this.setNickname(member.getNickname());
+    }
+
     //Builder Pattern
     public Member toMember() {
         return Member.builder()
