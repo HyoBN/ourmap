@@ -7,18 +7,21 @@
 <body>
 <h3 th:text="${userNickname} ">님 환영합니다!</h3>
 <button type="button" onclick="location.href='/logout' ">로그아웃</button>
+<br><br>
+<button type="button" onclick="location.href='/nicknamePage' ">닉네임 변경</button>
+<br><br>
 
-</form><form action="/nicknamePage" method="get">
+<button type="button" onclick="location.href='/mainPage' ">Map으로 이동</button>
+
+<br><br>
+
+<form action="/requestFriend" method="post">
     <div class="form-group">
-        <button type="submit">닉네임 변경</button>
+        <input type="text" name="friendNickname" required="required">
+        <button type="submit">친구 추가</button>
     </div>
 </form>
-
-<form action="/mainPage" method="get">
-    <div class="form-group">
-        <button type="submit">Map으로 이동</button>
-    </div>
-</form>
+<h3 th:text="${message}"></h3>
 
 
 </body>
