@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<h3 th:text="${message}"></h3>
+
+<div>
+    <ul th:each="msg : ${receivedMessages}">
+        <li>
+            <h3 th:text="${msg.sender}" />
+            <h3 th:text="${msg.type}"/>
+        </li>
+    </ul>
+</div>
+
+
+</body>
+</html>

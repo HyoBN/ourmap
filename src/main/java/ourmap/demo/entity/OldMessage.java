@@ -9,9 +9,10 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
 @Entity
+@NoArgsConstructor
 public class OldMessage extends Message{
 
-    public OldMessage(Long senderId, Long receiverId, MessageTypes messageType) {
-        super(senderId, receiverId, messageType);
+    public OldMessage(Member sender, Member receiver, MessageTypes messageType) {
+        super(sender, receiver, messageType);
     }
 }

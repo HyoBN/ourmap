@@ -17,10 +17,6 @@ public class MemberService {
     private final MemberRepository memberRepository;
     private final HttpSession httpSession;
 
-//    @Autowired
-//    public MemberService(MemberRepository memberRepository) {
-//        this.memberRepository = memberRepository;
-//    }
 
     public Long findMemberIdByEmailAndProvider(String email, String provider) {
         Member member = memberRepository.findByEmailAndProvider(email, provider).get();
@@ -31,9 +27,13 @@ public class MemberService {
         return memberRepository.findByEmailAndProvider(email, provider).get();
     }
 
-    public String findNicknameByMemberForm(MemberForm memberForm) {
-        Member member = findMemberByEmailAndProvider(memberForm.getEmail(), memberForm.getProvider());
+    public String findNicknameById(Long id) {
+        Member member = memberRepository.findById(id).get();
         return member.getNickname();
+    }
+
+    public Member findByNickname(String nickname) {
+        return memberRepository.findByNickname(nickname).get();
     }
 
     public void updateMemberInfo(Member member){

@@ -1,8 +1,10 @@
 package ourmap.demo.controller;
 
+import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import ourmap.demo.config.auth.MemberForm;
 import ourmap.demo.entity.Member;
@@ -29,4 +31,5 @@ public class FriendController {
         model.addAttribute("message", "친구 요청 완료");
         return "redirect:/home";
     }
+
 }

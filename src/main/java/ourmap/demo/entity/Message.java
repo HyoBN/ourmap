@@ -1,11 +1,14 @@
 package ourmap.demo.entity;
 
 import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.RequiredArgsConstructor;
 
 import javax.persistence.*;
 
 @Entity
 @Getter
+@NoArgsConstructor
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 public class Message {
 
@@ -13,11 +16,13 @@ public class Message {
     @GeneratedValue(strategy= GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name="sender_id",nullable = false)
-    private Long senderId;
+    @ManyToOne
+    @JoinColumn(name="sender_id",nullable = false)
+    private Member sender;
 
-    @Column(name="receiver_id",nullable = false)
-    private Long receiverId;
+    @ManyToOne
+    @JoinColumn(name="receiver_id",nullable = false)
+    private Member receiver;
 
     @Enumerated(value = EnumType.STRING)
     @Column(name="message_type",nullable = false)
@@ -25,9 +30,9 @@ public class Message {
 
     private String contents;
 
-    public Message(Long senderId, Long receiverId, MessageTypes messageType) {
-        this.senderId = senderId;
-        this.receiverId = receiverId;
+    public Message(Member sender, Member receiver, MessageTypes messageType) {
+        this.sender = sender;
+        this.receiver = receiver;
         this.messageType = messageType;
     }
 }

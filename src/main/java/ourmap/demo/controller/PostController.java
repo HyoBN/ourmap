@@ -48,7 +48,9 @@ public class PostController {
     public String newPost(PostForm form, Model model) {
         MemberForm member = (MemberForm) httpSession.getAttribute("member");
         //model.addAttribute("userName", member.getName());
-
+        System.out.println("스토어타입 테스트");
+        // .name() 안붙여도 CAFE 가 제대로 뜸.
+        System.out.println("form.getStoreType() = " + form.getStoreType());
         Post post = new Post(form.getStoreName(), form.getStoreType(), memberService.findMemberIdByEmailAndProvider(member.getEmail(), member.getProvider()));
         Tip tip = new Tip(post, form.getTip(), memberService.findMemberIdByEmailAndProvider(member.getEmail(), member.getProvider()));
         tipService.upload(tip);
