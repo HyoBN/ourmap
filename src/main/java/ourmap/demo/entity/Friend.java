@@ -17,11 +17,11 @@ public class Friend {
     private Long id;
 
     @ManyToOne(cascade = CascadeType.PERSIST)
-    @JoinColumn(name = "member_1_id")
+    @JoinColumn(name = "member1_id")
     private Member member1;
 
     @ManyToOne(cascade = CascadeType.PERSIST)
-    @JoinColumn(name = "member_2_id")
+    @JoinColumn(name = "member2_id")
     private Member member2;
 
 }

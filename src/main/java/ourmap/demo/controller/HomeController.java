@@ -11,18 +11,27 @@ import ourmap.demo.config.auth.MemberForm;
 import ourmap.demo.entity.Member;
 import ourmap.demo.entity.Post;
 import ourmap.demo.entity.StoreTypes;
+import ourmap.demo.entity.Tip;
+import ourmap.demo.service.FriendService;
 import ourmap.demo.service.MemberService;
 import ourmap.demo.service.PostService;
+import ourmap.demo.service.TipService;
 
 import javax.servlet.http.HttpSession;
+import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Controller
 @RequiredArgsConstructor
 public class HomeController {
 
     private final PostService postService;
+    private final TipService tipService;
+
     private final MemberService memberService;
+    private final FriendService friendService;
     private final HttpSession httpSession;
 
     @ModelAttribute("storeTypes")
@@ -37,8 +46,36 @@ public class HomeController {
     }
 
     @ModelAttribute("posts")
-    private List<Post> posts(){
-        return postService.findPosts();
+    private List<PostResponseDTO> posts(){
+        MemberForm member = (MemberForm) httpSession.getAttribute("member");
+        Long memberId = memberService.findMemberIdByEmailAndProvider(member.getEmail(), member.getProvider());
+        List<Long> tipWriterId = new ArrayList<>();
+        tipWriterId.add(memberId);
+        tipWriterId.addAll(friendService.findFriendsId(memberId));
+        List<Tip> tips = new ArrayList<>();
+        for (Long writerId : tipWriterId) {
+            tips.addAll(tipService.findTipByWriter(writerId));
+        }
+        Set<PostResponseDTO> postSet = new HashSet<>();
+        Set<Long> postIdBytips = new HashSet<>();
+        for (Tip tip : tips) {
+            postIdBytips.add(tip.getPost().getId());
+        }
+        for (Long pid : postIdBytips) {
+            Post post = postService.findPostById(pid);
+            PostResponseDTO postResponseDTO = new PostResponseDTO(post);
+            postSet.add(postResponseDTO);
+        }
+
+        for (Tip tip : tips) {
+            for (PostResponseDTO postResponseDTO : postSet) {
+                if(tip.getPost().getId()==postResponseDTO.getId()){
+                    postResponseDTO.tips.add(tip);
+                }
+            }
+        }
+        List<PostResponseDTO> posts = new ArrayList<>(postSet);
+        return posts;
     }
 
     @GetMapping("/mainPage")

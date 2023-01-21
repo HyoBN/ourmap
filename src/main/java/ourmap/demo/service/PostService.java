@@ -1,6 +1,7 @@
 package ourmap.demo.service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import ourmap.demo.controller.PostResponseDTO;
 import ourmap.demo.entity.Post;
 import ourmap.demo.entity.StoreTypes;
 import ourmap.demo.repository.PostRepository;
@@ -29,12 +30,7 @@ public class PostService {
     }
 
     public Post findPostById(Long id) {
-        //optional 처리를 위해 .get()사용
         return postRepository.findById(id).get();
-    }
-
-    public Post findPostByName(String name){
-        return postRepository.findByStoreName(name);
     }
 
     public List<Post> findByNameContains(String name) {
@@ -47,4 +43,6 @@ public class PostService {
     public List<Post> findByStoreType(String type) {
         return postRepository.findByStoreType(StoreTypes.valueOf(type));
     }
+
+
 }

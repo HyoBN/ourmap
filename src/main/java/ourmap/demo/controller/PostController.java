@@ -8,18 +8,23 @@ import ourmap.demo.config.auth.MemberForm;
 import ourmap.demo.entity.Post;
 import ourmap.demo.entity.StoreTypes;
 import ourmap.demo.entity.Tip;
+import ourmap.demo.service.FriendService;
 import ourmap.demo.service.MemberService;
 import ourmap.demo.service.PostService;
 import ourmap.demo.service.TipService;
 
 import javax.servlet.http.HttpSession;
+import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Controller
 @RequiredArgsConstructor
 public class PostController {
     private final PostService postService;
     private final TipService tipService;
+    private final FriendService friendService;
     private final MemberService memberService;
     private final HttpSession httpSession;
 
@@ -29,9 +34,39 @@ public class PostController {
     }
 
     @ModelAttribute("posts")
-    private List<Post> posts(){
-        return postService.findPosts();
+    private List<PostResponseDTO> posts(){
+        MemberForm member = (MemberForm) httpSession.getAttribute("member");
+        Long memberId = memberService.findMemberIdByEmailAndProvider(member.getEmail(), member.getProvider());
+        List<Long> tipWriterId = new ArrayList<>();
+        tipWriterId.add(memberId);
+        tipWriterId.addAll(friendService.findFriendsId(memberId));
+        List<Tip> tips = new ArrayList<>();
+        for (Long writerId : tipWriterId) {
+            tips.addAll(tipService.findTipByWriter(writerId));
+        }
+        Set<PostResponseDTO> postSet = new HashSet<>();
+        Set<Long> postIdBytips = new HashSet<>();
+        for (Tip tip : tips) {
+            postIdBytips.add(tip.getPost().getId());
+        }
+        for (Long pid : postIdBytips) {
+            Post post = postService.findPostById(pid);
+            PostResponseDTO postResponseDTO = new PostResponseDTO(post);
+            postSet.add(postResponseDTO);
+        }
+
+        for (Tip tip : tips) {
+            for (PostResponseDTO postResponseDTO : postSet) {
+                if(tip.getPost().getId()==postResponseDTO.getId()){
+                    postResponseDTO.tips.add(tip);
+                }
+            }
+        }
+        List<PostResponseDTO> posts = new ArrayList<>(postSet);
+        return posts;
     }
+
+
     @ModelAttribute("userNickname")
     private String userNickname(){
         MemberForm member = (MemberForm) httpSession.getAttribute("member");
@@ -47,10 +82,6 @@ public class PostController {
     @PostMapping("/newForm")
     public String newPost(PostForm form, Model model) {
         MemberForm member = (MemberForm) httpSession.getAttribute("member");
-        //model.addAttribute("userName", member.getName());
-        System.out.println("스토어타입 테스트");
-        // .name() 안붙여도 CAFE 가 제대로 뜸.
-        System.out.println("form.getStoreType() = " + form.getStoreType());
         Post post = new Post(form.getStoreName(), form.getStoreType(), memberService.findMemberIdByEmailAndProvider(member.getEmail(), member.getProvider()));
         Tip tip = new Tip(post, form.getTip(), memberService.findMemberIdByEmailAndProvider(member.getEmail(), member.getProvider()));
         tipService.upload(tip);
