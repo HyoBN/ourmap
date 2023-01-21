@@ -49,33 +49,7 @@ public class HomeController {
     private List<PostResponseDTO> posts(){
         MemberForm member = (MemberForm) httpSession.getAttribute("member");
         Long memberId = memberService.findMemberIdByEmailAndProvider(member.getEmail(), member.getProvider());
-        List<Long> tipWriterId = new ArrayList<>();
-        tipWriterId.add(memberId);
-        tipWriterId.addAll(friendService.findFriendsId(memberId));
-        List<Tip> tips = new ArrayList<>();
-        for (Long writerId : tipWriterId) {
-            tips.addAll(tipService.findTipByWriter(writerId));
-        }
-        Set<PostResponseDTO> postSet = new HashSet<>();
-        Set<Long> postIdBytips = new HashSet<>();
-        for (Tip tip : tips) {
-            postIdBytips.add(tip.getPost().getId());
-        }
-        for (Long pid : postIdBytips) {
-            Post post = postService.findPostById(pid);
-            PostResponseDTO postResponseDTO = new PostResponseDTO(post);
-            postSet.add(postResponseDTO);
-        }
-
-        for (Tip tip : tips) {
-            for (PostResponseDTO postResponseDTO : postSet) {
-                if(tip.getPost().getId()==postResponseDTO.getId()){
-                    postResponseDTO.tips.add(tip);
-                }
-            }
-        }
-        List<PostResponseDTO> posts = new ArrayList<>(postSet);
-        return posts;
+        return postService.getFriendsPostDTO(memberId);
     }
 
     @GetMapping("/mainPage")

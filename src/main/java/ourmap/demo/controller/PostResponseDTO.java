@@ -24,7 +24,7 @@ public class PostResponseDTO {
     @Enumerated(value = EnumType.STRING)
     private StoreTypes storeType;
 
-    List<Tip> tips = new ArrayList<>();
+    public List<Tip> tips = new ArrayList<>();
 
     public PostResponseDTO(long id, List<Tip> tips) {
         this.id = id;
