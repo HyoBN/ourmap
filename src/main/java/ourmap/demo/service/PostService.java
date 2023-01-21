@@ -45,12 +45,16 @@ public class PostService {
         return postRepository.findById(id).get();
     }
 
-    public List<Post> findByNameContains(String name) {
-        return postRepository.findByStoreNameContains(name);
+    public List<PostResponseDTO> findByNameContains(Long memberId, String name) {
+        List<PostResponseDTO> friendsPostDTO = getFriendsPostDTO(memberId);
+        List<PostResponseDTO> containsNamePostDTO = new ArrayList<>();
+        for (PostResponseDTO postResponseDTO : friendsPostDTO) {
+            if (postResponseDTO.getStoreName().contains(name)) {
+                containsNamePostDTO.add(postResponseDTO);
+            }
+        }
+        return containsNamePostDTO;
     }
-
-    public List<Post> findByWriterId(Long writerId){
-        return postRepository.findByWriterId(writerId);}
 
     public List<PostResponseDTO> findByStoreType(Long memberId, String type) {
         List<PostResponseDTO> friendsPostDTO = getFriendsPostDTO(memberId);

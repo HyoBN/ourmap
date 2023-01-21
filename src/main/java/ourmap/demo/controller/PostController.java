@@ -93,7 +93,9 @@ public class PostController {
     @GetMapping("/searchByName")
     public String search(String name, Model model) {
         MemberForm member = (MemberForm) httpSession.getAttribute("member");
-        List<Post> searchedPosts = postService.findByNameContains(name);
+        Long memberId = memberService.findMemberIdByEmailAndProvider(member.getEmail(), member.getProvider());
+
+        List<PostResponseDTO> searchedPosts = postService.findByNameContains(memberId, name);
         // 검색 결과가 없을 시 message 전달, 출력 로직 추가하기.
         model.addAttribute("posts", searchedPosts);
         return "basic/mainPage";
