@@ -1,17 +1,14 @@
 package ourmap.demo.controller;
 
-import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import ourmap.demo.config.auth.MemberForm;
 import ourmap.demo.entity.Member;
 import ourmap.demo.service.FriendService;
 import ourmap.demo.service.MemberService;
 
-import javax.servlet.ServletContext;
 import javax.servlet.http.HttpSession;
 
 @Controller
@@ -30,6 +27,18 @@ public class FriendController {
         friendService.request(senderId, receiver.getId());
         model.addAttribute("message", "친구 요청 완료");
         return "redirect:/home";
+    }
+
+    @PostMapping("/friendAccept")
+    public String acceptFriendRequest(Model model, Long messageId) {
+        friendService.acceptRequest(messageId);
+        return "redirect:/mailBox";
+    }
+
+    @PostMapping("/friendReject")
+    public String rejectFriendRequest(Model model, Long messageId) {
+        friendService.rejectRequest(messageId);
+        return "redirect:/mailBox";
     }
 
 }

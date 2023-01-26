@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import ourmap.demo.config.auth.MemberForm;
 import ourmap.demo.entity.Member;
 import ourmap.demo.entity.NewMessage;
@@ -36,5 +37,7 @@ public class MessageController {
         }
         return "basic/mailbox";
     }
+
+
 }
 

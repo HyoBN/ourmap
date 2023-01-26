@@ -24,4 +24,8 @@ public class Friend {
     @JoinColumn(name = "member2_id")
     private Member member2;
 
+    public Friend(Member member1, Member member2) {
+        this.member1 = member1;
+        this.member2 = member2;
+    }
 }

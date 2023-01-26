@@ -5,14 +5,23 @@
     <title>Title</title>
 </head>
 <body>
-<h3 th:text="${message}"></h3>
+<h2>받은 친구 신청</h2>
+<br>
 
 <div>
     <ul th:each="msg : ${receivedMessages}">
         <li>
             <h3 th:text="${msg.sender}" />
-            <h3 th:text="${msg.type}"/>
+            <form action="/friendAccept" method="post">
+                <input type="hidden" name="messageId" th:value="${msg.id}"/>
+                <button type = "submit">수락</button>
+            </form>
+            <form action="/friendReject" method="post">
+                <input type="hidden" name="messageId" th:value="${msg.id}"/>
+                <button type = "submit">거절</button>
+            </form>
         </li>
+
     </ul>
 </div>
 

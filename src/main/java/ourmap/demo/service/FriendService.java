@@ -3,9 +3,7 @@ package ourmap.demo.service;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import ourmap.demo.entity.Member;
-import ourmap.demo.entity.MessageTypes;
-import ourmap.demo.entity.NewMessage;
+import ourmap.demo.entity.*;
 import ourmap.demo.repository.FriendRepository;
 import ourmap.demo.repository.MemberRepository;
 import ourmap.demo.repository.NewMessageRepository;
@@ -17,6 +15,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class FriendService {
 
+    private final MessageService messageService;
     private final FriendRepository friendRepository;
     private final NewMessageRepository newMessageRepository;
     private final OldMessageRepository oldMessageRepository;
@@ -35,5 +34,28 @@ public class FriendService {
         List<Long> friends = friendRepository.findMember1IdByMember2Id(memberId);
         friends.addAll(friendRepository.findMember2IdByMember1Id(memberId));
         return friends;
+    }
+
+    public void acceptRequest(Long messageId){
+        NewMessage requestMsg = newMessageRepository.findById(messageId).get();
+        MessageTypes messageTypes = MessageTypes.FRIENDACCEPT;
+        Member sender = requestMsg.getSender();
+        Member receiver = requestMsg.getReceiver();
+        messageService.newToOld(requestMsg.getId());
+        OldMessage oldMessage = new OldMessage(receiver, sender, messageTypes);
+        oldMessageRepository.save(oldMessage);
+        newMessageRepository.deleteById(messageId);
+        Friend friend = new Friend(receiver, sender);
+        friendRepository.save(friend);
+    }
+
+    public void rejectRequest(Long messageId) {
+        NewMessage requestMsg = newMessageRepository.findById(messageId).get();
+        MessageTypes messageTypes = MessageTypes.FRIENDREJECT;
+        messageService.newToOld(requestMsg.getId());
+        OldMessage oldMessage = new OldMessage(requestMsg.getReceiver(), requestMsg.getSender(), messageTypes);
+
+        oldMessageRepository.save(oldMessage);
+        newMessageRepository.deleteById(messageId);
     }
 }

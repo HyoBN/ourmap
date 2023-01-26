@@ -14,11 +14,13 @@ import ourmap.demo.service.MemberService;
 @Setter
 public class MessageForm {
 
+    private Long id;
     private String sender;
     private String receiver;
     private String type;
 
     public MessageForm(Message message) {
+        this.id= message.getId();
         this.sender = message.getSender().getNickname();
         this.receiver = message.getReceiver().getNickname();
         this.type = message.getMessageType().getDescription();
