@@ -9,6 +9,7 @@ import ourmap.demo.repository.MemberRepository;
 import ourmap.demo.repository.NewMessageRepository;
 import ourmap.demo.repository.OldMessageRepository;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -31,9 +32,14 @@ public class FriendService {
     }
 
     public List<Long> findFriendsId(Long memberId) {
-        List<Long> friends = friendRepository.findMember1IdByMember2Id(memberId);
-        friends.addAll(friendRepository.findMember2IdByMember1Id(memberId));
-        return friends;
+        List<Long> friendsId = new ArrayList<>();
+        for (Friend friend : friendRepository.findByMember2Id(memberId)) {
+            friendsId.add(friend.getMember1().getId());
+        }
+        for (Friend friend : friendRepository.findByMember1Id(memberId)) {
+            friendsId.add(friend.getMember2().getId());
+        }
+        return friendsId;
     }
 
     public void acceptRequest(Long messageId){
