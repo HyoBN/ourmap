@@ -23,12 +23,19 @@ public class FriendService {
     private final MemberRepository memberRepository;
 
     @Transactional
-    public void request(Long senderId, Long receiverId) {
+    public boolean request(Long senderId, Long receiverId) {
+        List<Long> friendsId = findFriendsId(senderId);
+        for (Long fid : friendsId) {
+            if (fid == receiverId) {
+                return false;
+            }
+        }
         MessageTypes messageTypes = MessageTypes.FRIENDREQUEST;
         Member sender = memberRepository.findById(senderId).get();
         Member receiver = memberRepository.findById(receiverId).get();
         NewMessage newMessage = new NewMessage(sender, receiver, messageTypes);
         newMessageRepository.save(newMessage);
+        return true;
     }
 
     public List<Long> findFriendsId(Long memberId) {

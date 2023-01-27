@@ -26,14 +26,13 @@ public class MemberService {
     public Member findMemberByEmailAndProvider(String email, String provider) {
         return memberRepository.findByEmailAndProvider(email, provider).get();
     }
-
     public String findNicknameById(Long id) {
         Member member = memberRepository.findById(id).get();
         return member.getNickname();
     }
 
-    public Member findByNickname(String nickname) {
-        return memberRepository.findByNickname(nickname).get();
+    public Optional<Member> findByNickname(String nickname) {
+        return memberRepository.findByNickname(nickname);
     }
 
     public void updateMemberInfo(Member member){
