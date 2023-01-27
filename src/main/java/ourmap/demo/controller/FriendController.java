@@ -39,7 +39,7 @@ public class FriendController {
             else if(friendService.request(senderId, receiver.getId())) {
                 model.addAttribute("message", "친구 요청 완료");
             }else{
-                model.addAttribute("message", "이미 친구입니다.");
+                model.addAttribute("message", "이미 친구이거나 요청을 한 상태입니다.");
             }
         }catch (NoSuchElementException e){
             model.addAttribute("message", "존재하지 않는 닉네임입니다.");}

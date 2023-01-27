@@ -3,6 +3,7 @@ package ourmap.demo.service;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import ourmap.demo.controller.MessageForm;
+import ourmap.demo.entity.MessageTypes;
 import ourmap.demo.entity.NewMessage;
 import ourmap.demo.entity.OldMessage;
 import ourmap.demo.repository.NewMessageRepository;
@@ -10,6 +11,7 @@ import ourmap.demo.repository.OldMessageRepository;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.Optional;
 
 @Service
@@ -35,5 +37,12 @@ public class MessageService {
         oldMessageRepository.save(oldMessage);
     }
 
-
+    public boolean isExistNewMessage(Long senderId, Long receiver_id, MessageTypes messageTypes) {
+        try {
+            NewMessage message = newMessageRepository.findBySenderIdAndReceiverIdAndMessageType(senderId, receiver_id, messageTypes).get();
+        } catch (NoSuchElementException e) {
+            return false;
+        }
+        return true;
+    }
 }

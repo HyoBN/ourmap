@@ -31,6 +31,9 @@ public class FriendService {
             }
         }
         MessageTypes messageTypes = MessageTypes.FRIENDREQUEST;
+        if(messageService.isExistNewMessage(senderId,receiverId,messageTypes)){
+            return false;
+        }
         Member sender = memberRepository.findById(senderId).get();
         Member receiver = memberRepository.findById(receiverId).get();
         NewMessage newMessage = new NewMessage(sender, receiver, messageTypes);
