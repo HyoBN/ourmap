@@ -7,7 +7,6 @@ import ourmap.demo.entity.Post;
 
 @Getter @Setter
 public class TipForm {
-
     @NotNull
     private Long postId;
     private String comment;

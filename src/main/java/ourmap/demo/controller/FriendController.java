@@ -30,7 +30,7 @@ public class FriendController {
     @PostMapping("/requestFriend")
     public String requestFriend(String friendNickname, Model model) {
         MemberForm member = (MemberForm) httpSession.getAttribute("member");
-        Long senderId = memberService.findMemberIdByEmailAndProvider(member.getEmail(), member.getProvider());
+        Long senderId = memberService.findMemberByEmailAndProvider(member.getEmail(), member.getProvider()).getId();
         try{
             Member receiver = memberService.findByNickname(friendNickname).get();
             if(senderId==receiver.getId()){
@@ -47,15 +47,14 @@ public class FriendController {
     }
 
     @PostMapping("/friendAccept")
-    public String acceptFriendRequest(Model model, Long messageId) {
+    public String acceptFriendRequest(Long messageId) {
         friendService.acceptRequest(messageId);
         return "redirect:/mailBox";
     }
 
     @PostMapping("/friendReject")
-    public String rejectFriendRequest(Model model, Long messageId) {
+    public String rejectFriendRequest(Long messageId) {
         friendService.rejectRequest(messageId);
         return "redirect:/mailBox";
     }
-
 }

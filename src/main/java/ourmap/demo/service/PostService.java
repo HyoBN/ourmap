@@ -1,5 +1,5 @@
 package ourmap.demo.service;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import ourmap.demo.controller.PostResponseDTO;
 import ourmap.demo.entity.Post;
@@ -13,42 +13,22 @@ import java.util.List;
 import java.util.Set;
 
 @Service
+@RequiredArgsConstructor
 public class PostService {
     private final TipService tipService;
-
-    private final MemberService memberService;
     private final FriendService friendService;
     private final PostRepository postRepository;
 
-    @Autowired
-    public PostService(TipService tipService, MemberService memberService, FriendService friendService, PostRepository postRepository) {
-        this.tipService = tipService;
-        this.memberService = memberService;
-        this.friendService = friendService;
-        this.postRepository = postRepository;
-    }
-
-    public Long upload(Post post) {
+    public void upload(Post post) {
         postRepository.save(post);
-        return post.getId();
     }
-    public Long deletePost(Long id) {
-        postRepository.deleteById(id);
-        return id;
-    }
-
-    public List<Post> findPosts(){
-        return postRepository.findAll();
-    }
-
     public Post findPostById(Long id) {
         return postRepository.findById(id).get();
     }
 
-    public List<PostResponseDTO> findByNameContains(Long memberId, String name) {
-        List<PostResponseDTO> friendsPostDTO = getFriendsPostDTO(memberId);
+    public List<PostResponseDTO> findByNameContains(Long memberId, String    name) {
         List<PostResponseDTO> containsNamePostDTO = new ArrayList<>();
-        for (PostResponseDTO postResponseDTO : friendsPostDTO) {
+        for (PostResponseDTO postResponseDTO : getFriendsPostDTO(memberId)) {
             if (postResponseDTO.getStoreName().contains(name)) {
                 containsNamePostDTO.add(postResponseDTO);
             }
@@ -57,9 +37,8 @@ public class PostService {
     }
 
     public List<PostResponseDTO> findByStoreType(Long memberId, String type) {
-        List<PostResponseDTO> friendsPostDTO = getFriendsPostDTO(memberId);
         List<PostResponseDTO> categoryPostDTO = new ArrayList<>();
-        for (PostResponseDTO postResponseDTO : friendsPostDTO) {
+        for (PostResponseDTO postResponseDTO : getFriendsPostDTO(memberId)) {
             if (postResponseDTO.getStoreType().equals(StoreTypes.valueOf(type))) {
                 categoryPostDTO.add(postResponseDTO);
             }
@@ -73,7 +52,7 @@ public class PostService {
         tipWriterId.addAll(friendService.findFriendsId(memberId));
         List<Tip> tips = new ArrayList<>();
         for (Long writerId : tipWriterId) {
-            tips.addAll(tipService.findTipByWriter(writerId));
+            tips.addAll(tipService.findByWriter(writerId));
         }
         List<PostResponseDTO> postDTOs = new ArrayList<>();
         Set<Long> postIdByTips = new HashSet<>();
@@ -95,5 +74,4 @@ public class PostService {
         }
         return postDTOs;
     }
-
 }

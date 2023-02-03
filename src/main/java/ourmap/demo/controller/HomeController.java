@@ -9,29 +9,20 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import ourmap.demo.config.auth.MemberForm;
 import ourmap.demo.entity.Member;
-import ourmap.demo.entity.Post;
 import ourmap.demo.entity.StoreTypes;
-import ourmap.demo.entity.Tip;
 import ourmap.demo.service.FriendService;
 import ourmap.demo.service.MemberService;
 import ourmap.demo.service.PostService;
 import ourmap.demo.service.TipService;
-
 import javax.servlet.http.HttpSession;
-import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 @Controller
 @RequiredArgsConstructor
 public class HomeController {
 
     private final PostService postService;
-    private final TipService tipService;
-
     private final MemberService memberService;
-    private final FriendService friendService;
     private final HttpSession httpSession;
 
     @ModelAttribute("storeTypes")
@@ -48,7 +39,7 @@ public class HomeController {
     @ModelAttribute("posts")
     private List<PostResponseDTO> posts(){
         MemberForm member = (MemberForm) httpSession.getAttribute("member");
-        Long memberId = memberService.findMemberIdByEmailAndProvider(member.getEmail(), member.getProvider());
+        Long memberId = memberService.findMemberByEmailAndProvider(member.getEmail(), member.getProvider()).getId();
         return postService.getFriendsPostDTO(memberId);
     }
 
@@ -88,7 +79,6 @@ public class HomeController {
     @PostMapping("/newNickname")
     public String newNickname(String nickname, Model model){
         MemberForm member = (MemberForm) httpSession.getAttribute("member");
-        String userNickname = member.getNickname();
         if(!isNotBlank(nickname)){
             model.addAttribute("checkMessage", "공백을 포함할 수 없습니다.");
             return "basic/changeNicknamePage";
@@ -104,7 +94,6 @@ public class HomeController {
             return "redirect:/home";
         }
     }
-
     @GetMapping("/home")
     public String home(Model model){
         MemberForm member = (MemberForm) httpSession.getAttribute("member");

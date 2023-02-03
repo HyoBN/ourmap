@@ -15,21 +15,12 @@ import java.util.List;
 @Getter
 @NoArgsConstructor
 public class PostResponseDTO {
-
     @Id
     private long id;
-
     private String storeName;
-
     @Enumerated(value = EnumType.STRING)
     private StoreTypes storeType;
-
     public List<Tip> tips = new ArrayList<>();
-
-    public PostResponseDTO(long id, List<Tip> tips) {
-        this.id = id;
-        this.tips = tips;
-    }
 
     public PostResponseDTO(Post post) {
         this.id=post.getId();

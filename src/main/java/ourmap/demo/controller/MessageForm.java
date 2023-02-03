@@ -13,7 +13,6 @@ import ourmap.demo.service.MemberService;
 @Getter
 @Setter
 public class MessageForm {
-
     private Long id;
     private String sender;
     private String receiver;
