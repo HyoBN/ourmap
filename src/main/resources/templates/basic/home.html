@@ -2,31 +2,44 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
+    <link rel="stylesheet" type="text/css" href="/css/hbDesign.css">
     <title>Title</title>
+
 </head>
 <body>
-<h3 th:text="|${userNickname}님 환영합니다! |"></h3>
-<button type="button" onclick="location.href='/logout' ">로그아웃</button>
-<br><br>
-<button type="button" onclick="location.href='/nicknamePage' ">닉네임 변경</button>
-<br><br>
+<div class="my_div bg_img">
+    <style>
+      body {
+        width: 100vw;
+        height: 100vh;
+        background-image: url("img/background.png");
+        background-size: 100% 100%;
+        background-position: center;
+      }
+</style>
+    <h3 th:text="|${userNickname}님 환영합니다! |"></h3>
+    <button type="button" onclick="location.href='/logout' ">로그아웃</button>
+    <br><br>
+    <button type="button" onclick="location.href='/nicknamePage' ">닉네임 변경</button>
+    <br><br>
 
-<button type="button" onclick="location.href='/mainPage' ">Map으로 이동</button>
+    <button type="button" onclick="location.href='/mainPage' ">Map으로 이동</button>
 
 
-<form action="/mailBox" method="get">
-    <button type="submit">받은 메시지</button>
-</form>
+    <form action="/mailBox" method="get">
+        <button type="submit">받은 메시지</button>
+    </form>
 
-<br><br>
+    <br><br>
 
-<form action="/requestFriend" method="post">
-    <div class="form-group">
-        <input type="text" name="friendNickname" required="required">
-        <button type="submit">친구 추가</button>
-    </div>
-</form>
-<h3 th:text="${message}"></h3>
+    <form action="/requestFriend" method="post">
+        <div class="form-group">
+            <input type="text" name="friendNickname" required="required">
+            <button type="submit">친구 추가</button>
+        </div>
+    </form>
+    <h3 th:text="${message}"></h3>
 
+</div>
 </body>
 </html>
