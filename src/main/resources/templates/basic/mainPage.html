@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-  <link rel="stylesheet" type="text/css" href="/css/bootstrap.css">
+  <link rel="stylesheet" type="text/css" href="/css/hbDesign.css">
 
   <meta charset="UTF-8">
   <title>타이틀틀</title>
@@ -10,17 +10,13 @@
 </style>
 </head>
 <body>
-<div style="margin-top:50px;margin-bottom:100px">
-  <h1 align="center">The Private Map</h1>
-</div>
+<img src="img/tipmi.png" class="tipmiMain" alt="TipMI">
+
 <h3 th:text="${userNickname} "></h3>
 <button type="button" onclick="location.href='/logout' ">로그아웃</button>
 <button type="button" onclick="location.href='/home' ">뒤로가기</button>
-<!-- 검색 창 넣기-->
 
-
-
-<div style="margin-bottom:100px">
+<div style="margin-bottom:40px">
 
   <div style="float:left;">
     <form action="/mainPage" method="get">
@@ -66,7 +62,7 @@
         </ul>
         <form action="/newComment" method="post">
           <input type="hidden" name="postId" th:value="${post.id}"/>
-          <input type="text" id="comment" name="comment" placeholder="comment 추가"/>
+          <input type="text" id="comment" name="comment" placeholder="comment 추가" required="required"/>
           <button type="submit">추가</button>
         </form>
       </div>
