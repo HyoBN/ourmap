@@ -5,6 +5,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import ourmap.demo.config.auth.MemberForm;
+import ourmap.demo.entity.Member;
 import ourmap.demo.entity.Post;
 import ourmap.demo.entity.StoreTypes;
 import ourmap.demo.entity.Tip;
@@ -31,9 +32,9 @@ public class PostController {
 
     @ModelAttribute("posts")
     private List<PostResponseDTO> posts(){
-        MemberForm member = (MemberForm) httpSession.getAttribute("member");
-        Long memberId = memberService.findMemberByEmailAndProvider(member.getEmail(), member.getProvider()).getId();
-        return postService.getFriendsPostDTO(memberId);
+        MemberForm memberForm = (MemberForm) httpSession.getAttribute("member");
+        Member member = memberService.findMemberByEmailAndProvider(memberForm.getEmail(), memberForm.getProvider());
+        return postService.getFriendsPostDTO(member);
     }
 
     @ModelAttribute("userNickname")
@@ -47,10 +48,10 @@ public class PostController {
 
     @PostMapping("/newForm")
     public String newPost(PostForm form) {
-        MemberForm member = (MemberForm) httpSession.getAttribute("member");
-        Long memberId = memberService.findMemberByEmailAndProvider(member.getEmail(), member.getProvider()).getId();
-        Post post = new Post(form.getStoreName(), form.getStoreType(),memberId);
-        Tip tip = new Tip(post, form.getTip(), memberId);
+        MemberForm memberForm = (MemberForm) httpSession.getAttribute("member");
+        Member member = memberService.findMemberByEmailAndProvider(memberForm.getEmail(), memberForm.getProvider());
+        Post post = new Post(form.getStoreName(), form.getStoreType(),member);
+        Tip tip = new Tip(post, form.getTip(), member);
         tipService.upload(tip);
         postService.upload(post);
         return "redirect:/mainPage";
@@ -64,7 +65,7 @@ public class PostController {
     @PostMapping("/newComment")
     public String newComment(TipForm tip) {
         MemberForm member = (MemberForm) httpSession.getAttribute("member");
-        Tip newTip = new Tip(postService.findPostById(tip.getPostId()), tip.getComment(),memberService.findMemberByEmailAndProvider(member.getEmail(), member.getProvider()).getId());
+        Tip newTip = new Tip(postService.findPostById(tip.getPostId()), tip.getComment(),memberService.findMemberByEmailAndProvider(member.getEmail(), member.getProvider()));
         tipService.upload(newTip);
         return "redirect:/mainPage";
     }
@@ -76,18 +77,19 @@ public class PostController {
 
     @GetMapping("/sortByCategory")
     public String categorySort(String category, Model model) {
-        MemberForm member = (MemberForm) httpSession.getAttribute("member");
-        Long memberId = memberService.findMemberByEmailAndProvider(member.getEmail(), member.getProvider()).getId();
-        List<PostResponseDTO> categoryPosts = postService.findByStoreType(memberId, category);
+
+        MemberForm memberForm = (MemberForm) httpSession.getAttribute("member");
+        Member member = memberService.findMemberByEmailAndProvider(memberForm.getEmail(), memberForm.getProvider());
+        List<PostResponseDTO> categoryPosts = postService.findByStoreType(member, category);
         model.addAttribute("posts", categoryPosts);
         return "basic/mainPage";
     }
 
     @GetMapping("/searchByName")
     public String search(String name, Model model) {
-        MemberForm member = (MemberForm) httpSession.getAttribute("member");
-        Long memberId = memberService.findMemberByEmailAndProvider(member.getEmail(), member.getProvider()).getId();
-        List<PostResponseDTO> searchedPosts = postService.findByNameContains(memberId, name);
+        MemberForm memberForm = (MemberForm) httpSession.getAttribute("member");
+        Member member = memberService.findMemberByEmailAndProvider(memberForm.getEmail(), memberForm.getProvider());
+        List<PostResponseDTO> searchedPosts = postService.findByNameContains(member, name);
         model.addAttribute("posts", searchedPosts);
         return "basic/mainPage";
     }
@@ -102,7 +104,7 @@ public class PostController {
     @PostMapping("/edit/{postId}")
     public String editPost(@PathVariable("postId") Long postId, PostForm form) {
         MemberForm member = (MemberForm) httpSession.getAttribute("member");
-        Post post = new Post(postId, form.getStoreName(), form.getStoreType(),memberService.findMemberByEmailAndProvider(member.getEmail(), member.getProvider()).getId());
+        Post post = new Post(postId, form.getStoreName(), form.getStoreType(),memberService.findMemberByEmailAndProvider(member.getEmail(), member.getProvider()));
         postService.upload(post);
         return "redirect:/mainPage";
     }
@@ -112,7 +114,7 @@ public class PostController {
         model.addAttribute(postService.findPostById(postId));
         MemberForm member = (MemberForm) httpSession.getAttribute("member");
         Long memberId = memberService.findMemberByEmailAndProvider(member.getEmail(), member.getProvider()).getId();
-        Long writerId = (tipService.findById(tipId)).getWriterId();
+        Long writerId = (tipService.findById(tipId)).getWriter().getId();
         if (memberId.equals(writerId)) {
             tipService.deleteTip(tipId);
         } else {

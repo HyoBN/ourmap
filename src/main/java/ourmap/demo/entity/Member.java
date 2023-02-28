@@ -33,9 +33,7 @@ public class Member {
     @Column(name = "nickname", nullable = true, unique = true)
     private String nickname;
 
-    //private List<Friend> friends = new ArrayList<>();
-
-    @Builder //생성을 Builder 패턴으로 하기 위해서
+    @Builder
     public Member(Long id, String name, String email, String provider, String nickname) {
         this.id = id;
         this.name = name;
@@ -47,7 +45,6 @@ public class Member {
     public void updateNickname(String nickname){
         this.nickname = nickname;
     }
-
 
     public Member update(String name, String email) {
         this.name = name;

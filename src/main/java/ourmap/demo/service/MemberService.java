@@ -14,7 +14,6 @@ import java.util.Optional;
 
 public class MemberService {
     private final MemberRepository memberRepository;
-    private final HttpSession httpSession;
 
     public Member findMemberByEmailAndProvider(String email, String provider) {
         return memberRepository.findByEmailAndProvider(email, provider).get();

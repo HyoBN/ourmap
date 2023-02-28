@@ -20,36 +20,33 @@ public class FriendService {
     private final FriendRepository friendRepository;
     private final NewMessageRepository newMessageRepository;
     private final OldMessageRepository oldMessageRepository;
-    private final MemberRepository memberRepository;
 
     @Transactional
-    public boolean request(Long senderId, Long receiverId) {
-        List<Long> friendsId = findFriendsId(senderId);
-        for (Long fid : friendsId) {
-            if (fid == receiverId) {
+    public boolean request(Member sender, Member receiver) {
+        List<Member> friendsId = findFriends(sender);
+        for (Member friend : friendsId) {
+            if (friend.getId() == receiver.getId()) {
                 return false;
             }
         }
         MessageTypes messageTypes = MessageTypes.FRIENDREQUEST;
-        if(messageService.isExistNewMessage(senderId,receiverId,messageTypes)){
+        if(messageService.isExistNewMessage(sender,receiver,messageTypes)){
             return false;
         }
-        Member sender = memberRepository.findById(senderId).get();
-        Member receiver = memberRepository.findById(receiverId).get();
         NewMessage newMessage = new NewMessage(sender, receiver, messageTypes);
         newMessageRepository.save(newMessage);
         return true;
     }
 
-    public List<Long> findFriendsId(Long memberId) {
-        List<Long> friendsId = new ArrayList<>();
-        for (Friend friend : friendRepository.findByMember2Id(memberId)) {
-            friendsId.add(friend.getMember1().getId());
+    public List<Member> findFriends(Member member) {
+        List<Member> friends = new ArrayList<>();
+        for (Friend friend : friendRepository.findByMember2Id(member.getId())) {
+            friends.add(friend.getMember1());
         }
-        for (Friend friend : friendRepository.findByMember1Id(memberId)) {
-            friendsId.add(friend.getMember2().getId());
+        for (Friend friend : friendRepository.findByMember1Id(member.getId())) {
+            friends.add(friend.getMember2());
         }
-        return friendsId;
+        return friends;
     }
 
     public void acceptRequest(Long messageId){
@@ -57,7 +54,7 @@ public class FriendService {
         MessageTypes messageTypes = MessageTypes.FRIENDACCEPT;
         Member sender = requestMsg.getSender();
         Member receiver = requestMsg.getReceiver();
-        messageService.newToOld(requestMsg.getId());
+        messageService.newToOld(requestMsg);
         OldMessage oldMessage = new OldMessage(receiver, sender, messageTypes);
         oldMessageRepository.save(oldMessage);
         newMessageRepository.deleteById(messageId);
@@ -68,7 +65,7 @@ public class FriendService {
     public void rejectRequest(Long messageId) {
         NewMessage requestMsg = newMessageRepository.findById(messageId).get();
         MessageTypes messageTypes = MessageTypes.FRIENDREJECT;
-        messageService.newToOld(requestMsg.getId());
+        messageService.newToOld(requestMsg);
         OldMessage oldMessage = new OldMessage(requestMsg.getReceiver(), requestMsg.getSender(), messageTypes);
 
         oldMessageRepository.save(oldMessage);

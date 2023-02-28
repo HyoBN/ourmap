@@ -38,9 +38,9 @@ public class HomeController {
 
     @ModelAttribute("posts")
     private List<PostResponseDTO> posts(){
-        MemberForm member = (MemberForm) httpSession.getAttribute("member");
-        Long memberId = memberService.findMemberByEmailAndProvider(member.getEmail(), member.getProvider()).getId();
-        return postService.getFriendsPostDTO(memberId);
+        MemberForm memberForm = (MemberForm) httpSession.getAttribute("member");
+        Member member = memberService.findMemberByEmailAndProvider(memberForm.getEmail(), memberForm.getProvider());
+        return postService.getFriendsPostDTO(member);
     }
 
     @GetMapping("/mainPage")

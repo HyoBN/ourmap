@@ -19,21 +19,25 @@ public class Post {
     private String storeName;
     @Enumerated(value = EnumType.STRING)
     private StoreTypes storeType;
-    private Long writerId;
+;
+    @ManyToOne(cascade = CascadeType.PERSIST)
+    @JoinColumn(name = "writer_id")
+    private Member writer;
+
 
     @OneToMany(mappedBy = "post", cascade = CascadeType.PERSIST)
     private List<Tip> tips = new ArrayList<>();
 
-    public Post(String storeName, StoreTypes storeType, Long writerId) {
+    public Post(String storeName, StoreTypes storeType, Member writer) {
         this.storeName = storeName;
         this.storeType = storeType;
-        this.writerId = writerId;
+        this.writer = writer;
     }
 
-    public Post(Long postId, String storeName, StoreTypes storeType, Long writerId) {
+    public Post(Long postId, String storeName, StoreTypes storeType, Member writer) {
         this.id=postId;
         this.storeName = storeName;
         this.storeType = storeType;
-        this.writerId = writerId;
+        this.writer = writer;
     }
 }

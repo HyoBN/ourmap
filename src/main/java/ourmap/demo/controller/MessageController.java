@@ -23,13 +23,8 @@ public class MessageController {
         MemberForm member = (MemberForm) httpSession.getAttribute("member");
         Member sender = memberService.findMemberByEmailAndProvider(member.getEmail(), member.getProvider());
 
-        List<MessageForm> receivedMessages = messageService.findReceivedMessage(sender.getId());
+        List<MessageForm> receivedMessages = messageService.findReceivedMessage(sender);
         model.addAttribute("receivedMessages", receivedMessages);
-
-        for (MessageForm message : receivedMessages) {
-            System.out.println("message = " + message.getSender());
-            System.out.println("message.getType() = " + message.getType());
-        }
         return "basic/mailbox";
     }
 

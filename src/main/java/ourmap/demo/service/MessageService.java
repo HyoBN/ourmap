@@ -3,6 +3,7 @@ package ourmap.demo.service;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import ourmap.demo.controller.MessageForm;
+import ourmap.demo.entity.Member;
 import ourmap.demo.entity.MessageTypes;
 import ourmap.demo.entity.NewMessage;
 import ourmap.demo.entity.OldMessage;
@@ -21,9 +22,9 @@ public class MessageService {
     private final OldMessageRepository oldMessageRepository;
 
 
-    public List<MessageForm> findReceivedMessage(Long id) {
+    public List<MessageForm> findReceivedMessage(Member member) {
         List<MessageForm> messageForms = new ArrayList<>();
-        List<NewMessage> newMessages = newMessageRepository.findByReceiverId(id);
+        List<NewMessage> newMessages = newMessageRepository.findByReceiverId(member.getId());
         for (NewMessage message : newMessages) {
             MessageForm messageForm = new MessageForm(message);
             messageForms.add(messageForm);
@@ -31,15 +32,14 @@ public class MessageService {
         return messageForms;
     }
 
-    public void newToOld(Long messageId) {
-        NewMessage message = newMessageRepository.findById(messageId).get();
+    public void newToOld(NewMessage message) {
         OldMessage oldMessage = new OldMessage(message.getSender(), message.getReceiver(), message.getMessageType());
         oldMessageRepository.save(oldMessage);
     }
 
-    public boolean isExistNewMessage(Long senderId, Long receiver_id, MessageTypes messageTypes) {
+    public boolean isExistNewMessage(Member sender, Member receiver, MessageTypes messageTypes) {
         try {
-            NewMessage message = newMessageRepository.findBySenderIdAndReceiverIdAndMessageType(senderId, receiver_id, messageTypes).get();
+            NewMessage message = newMessageRepository.findBySenderIdAndReceiverIdAndMessageType(sender.getId(), receiver.getId(), messageTypes).get();
         } catch (NoSuchElementException e) {
             return false;
         }

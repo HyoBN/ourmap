@@ -2,6 +2,7 @@ package ourmap.demo.service;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import ourmap.demo.controller.PostResponseDTO;
+import ourmap.demo.entity.Member;
 import ourmap.demo.entity.Post;
 import ourmap.demo.entity.StoreTypes;
 import ourmap.demo.entity.Tip;
@@ -26,9 +27,9 @@ public class PostService {
         return postRepository.findById(id).get();
     }
 
-    public List<PostResponseDTO> findByNameContains(Long memberId, String    name) {
+    public List<PostResponseDTO> findByNameContains(Member member, String name) {
         List<PostResponseDTO> containsNamePostDTO = new ArrayList<>();
-        for (PostResponseDTO postResponseDTO : getFriendsPostDTO(memberId)) {
+        for (PostResponseDTO postResponseDTO : getFriendsPostDTO(member)) {
             if (postResponseDTO.getStoreName().contains(name)) {
                 containsNamePostDTO.add(postResponseDTO);
             }
@@ -36,9 +37,9 @@ public class PostService {
         return containsNamePostDTO;
     }
 
-    public List<PostResponseDTO> findByStoreType(Long memberId, String type) {
+    public List<PostResponseDTO> findByStoreType(Member member, String type) {
         List<PostResponseDTO> categoryPostDTO = new ArrayList<>();
-        for (PostResponseDTO postResponseDTO : getFriendsPostDTO(memberId)) {
+        for (PostResponseDTO postResponseDTO : getFriendsPostDTO(member)) {
             if (postResponseDTO.getStoreType().equals(StoreTypes.valueOf(type))) {
                 categoryPostDTO.add(postResponseDTO);
             }
@@ -46,21 +47,23 @@ public class PostService {
         return categoryPostDTO;
     }
 
-    public List<PostResponseDTO> getFriendsPostDTO(Long memberId) {
-        List<Long> tipWriterId = new ArrayList<>();
-        tipWriterId.add(memberId);
-        tipWriterId.addAll(friendService.findFriendsId(memberId));
+    public List<PostResponseDTO> getFriendsPostDTO(Member member) {
+        List<Member> tipWriter = new ArrayList<>();
+        tipWriter.add(member);
+        tipWriter.addAll(friendService.findFriends(member));
+
         List<Tip> tips = new ArrayList<>();
-        for (Long writerId : tipWriterId) {
-            tips.addAll(tipService.findByWriter(writerId));
+        for (Member writer : tipWriter) {
+            tips.addAll(tipService.findByWriter(writer));
         }
-        List<PostResponseDTO> postDTOs = new ArrayList<>();
-        Set<Long> postIdByTips = new HashSet<>();
+
+        Set<Post> postByTips = new HashSet<>();
         for (Tip tip : tips) {
-            postIdByTips.add(tip.getPost().getId());
+            postByTips.add(tip.getPost());
         }
-        for (Long pid : postIdByTips) {
-            Post post = findPostById(pid);
+
+        List<PostResponseDTO> postDTOs = new ArrayList<>();
+        for (Post post : postByTips) {
             PostResponseDTO postResponseDTO = new PostResponseDTO(post);
             postDTOs.add(postResponseDTO);
         }

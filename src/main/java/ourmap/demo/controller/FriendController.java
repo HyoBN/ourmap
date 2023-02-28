@@ -30,13 +30,13 @@ public class FriendController {
     @PostMapping("/requestFriend")
     public String requestFriend(String friendNickname, Model model) {
         MemberForm member = (MemberForm) httpSession.getAttribute("member");
-        Long senderId = memberService.findMemberByEmailAndProvider(member.getEmail(), member.getProvider()).getId();
+        Member sender = memberService.findMemberByEmailAndProvider(member.getEmail(), member.getProvider());
         try{
             Member receiver = memberService.findByNickname(friendNickname).get();
-            if(senderId==receiver.getId()){
+            if(sender.equals(receiver)){
                 model.addAttribute("message", "나는 영원한 친구");
             }
-            else if(friendService.request(senderId, receiver.getId())) {
+            else if(friendService.request(sender, receiver)) {
                 model.addAttribute("message", "친구 요청 완료");
             }else{
                 model.addAttribute("message", "이미 친구이거나 요청을 한 상태입니다.");
