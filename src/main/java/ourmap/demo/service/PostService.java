@@ -1,6 +1,7 @@
 package ourmap.demo.service;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import ourmap.demo.controller.PostForm;
 import ourmap.demo.controller.PostResponseDTO;
 import ourmap.demo.entity.Member;
 import ourmap.demo.entity.Post;
@@ -8,10 +9,7 @@ import ourmap.demo.entity.StoreTypes;
 import ourmap.demo.entity.Tip;
 import ourmap.demo.repository.PostRepository;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 @Service
 @RequiredArgsConstructor
@@ -76,5 +74,14 @@ public class PostService {
             }
         }
         return postDTOs;
+    }
+
+    public boolean isExistPost(PostForm postForm) {
+        try {
+            Post post = postRepository.findByStoreNameAndStoreType(postForm.getStoreName(), postForm.getStoreType()).get();
+        } catch (NoSuchElementException e) {
+            return false;
+        }
+        return true;
     }
 }

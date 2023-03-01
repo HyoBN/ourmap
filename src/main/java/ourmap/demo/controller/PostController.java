@@ -47,7 +47,11 @@ public class PostController {
     public String newPostPage() { return "post/newForm";}
 
     @PostMapping("/newForm")
-    public String newPost(PostForm form) {
+    public String newPost(Model model, PostForm form) {
+        if(postService.isExistPost(form)){
+            model.addAttribute("msg", "이미 존재하는 post 입니다.");
+            return "post/newForm";
+        }
         MemberForm memberForm = (MemberForm) httpSession.getAttribute("member");
         Member member = memberService.findMemberByEmailAndProvider(memberForm.getEmail(), memberForm.getProvider());
         Post post = new Post(form.getStoreName(), form.getStoreType(),member);
