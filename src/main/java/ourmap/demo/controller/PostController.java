@@ -70,7 +70,14 @@ public class PostController {
     }
 
     @PostMapping("/newComment")
-    public String newComment(TipForm tip) {
+    public String newComment(TipForm tip, Model model) {
+        if(tipService.isExistTip(tip)){
+            model.addAttribute("msg", "동일한 내용의 tip이 이미 존재합니다.");
+            return "basic/mainPage";
+        } else if (tipService.isTooLongTip(tip)) {
+            model.addAttribute("msg", "100글자 이내의 tip을 입력해주세요.");
+            return "basic/mainPage";
+        }
         MemberForm member = (MemberForm) httpSession.getAttribute("member");
         Tip newTip = new Tip(postService.findPostById(tip.getPostId()), tip.getComment(),memberService.findMemberByEmailAndProvider(member.getEmail(), member.getProvider()));
         tipService.upload(newTip);
@@ -109,7 +116,14 @@ public class PostController {
     }
 
     @PostMapping("/edit/{postId}")
-    public String editPost(@PathVariable("postId") Long postId, PostForm form) {
+    public String editPost(@PathVariable("postId") Long postId, PostForm form,Model model) {
+        if(postService.isExistPost(form)){
+            model.addAttribute("msg", "이미 존재하는 post 입니다.");
+            return "post/editForm";
+        } else if (postService.isTooLongName(form)) {
+            model.addAttribute("msg", "20글자 이내의 가게명을 입력해주세요.");
+            return "post/editForm";
+        }
         MemberForm member = (MemberForm) httpSession.getAttribute("member");
         Post post = new Post(postId, form.getStoreName(), form.getStoreType(),memberService.findMemberByEmailAndProvider(member.getEmail(), member.getProvider()));
         postService.upload(post);
