@@ -51,6 +51,9 @@ public class PostController {
         if(postService.isExistPost(form)){
             model.addAttribute("msg", "이미 존재하는 post 입니다.");
             return "post/newForm";
+        } else if (postService.isTooLongName(form)) {
+            model.addAttribute("msg", "20글자 이내의 가게명을 입력해주세요.");
+            return "post/newForm";
         }
         MemberForm memberForm = (MemberForm) httpSession.getAttribute("member");
         Member member = memberService.findMemberByEmailAndProvider(memberForm.getEmail(), memberForm.getProvider());

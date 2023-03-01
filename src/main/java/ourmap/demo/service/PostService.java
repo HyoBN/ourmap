@@ -84,4 +84,11 @@ public class PostService {
         }
         return true;
     }
+
+    public boolean isTooLongName(PostForm postForm) {
+        if(postForm.getStoreName().length()>20){
+            return true;
+        }
+        return false;
+    }
 }
