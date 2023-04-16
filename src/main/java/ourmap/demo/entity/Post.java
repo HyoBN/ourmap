@@ -1,5 +1,6 @@
 package ourmap.demo.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -19,12 +20,12 @@ public class Post {
     private String storeName;
     @Enumerated(value = EnumType.STRING)
     private StoreTypes storeType;
-;
+
     @ManyToOne(cascade = CascadeType.PERSIST)
     @JoinColumn(name = "writer_id")
     private Member writer;
 
-
+    @JsonIgnore
     @OneToMany(mappedBy = "post", cascade = CascadeType.PERSIST)
     private List<Tip> tips = new ArrayList<>();
 

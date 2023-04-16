@@ -41,6 +41,8 @@ public class customOAuthService implements OAuth2UserService<OAuth2UserRequest, 
         memberForm.setProvider(registrationId);
         Member member = saveOrUpdate(memberForm);
         memberForm.setNickname(member.getNickname());
+
+
         httpSession.setAttribute("member", memberForm); // member로 넘기면 id가 노출되니까 memberProfile로 세션 넘김.
 
         Map<String, Object> customAttribute = customAttribute(attributes, userNameAttributeName, memberForm, registrationId);

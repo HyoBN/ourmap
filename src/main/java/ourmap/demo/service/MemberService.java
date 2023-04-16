@@ -6,7 +6,6 @@ import org.springframework.stereotype.Service;
 import ourmap.demo.entity.Member;
 import ourmap.demo.repository.MemberRepository;
 
-import javax.servlet.http.HttpSession;
 import java.util.Optional;
 
 @Service
@@ -23,15 +22,21 @@ public class MemberService {
         return memberRepository.findByNickname(nickname);
     }
 
-    public void updateMemberInfo(Member member){
+    public void saveOrUpdateMember(Member member){
         memberRepository.save(member);
     }
 
-    public boolean IsSameNickname(String nickname) {
+    public boolean existSameNickname(String nickname) {
         Optional<Member> member = memberRepository.findByNickname(nickname);
         if (member.isPresent()) {
             return true;
         }
         return false;
+    }
+
+    public boolean isPossibleNickname(String nickname) {
+        if (!nickname.matches("[0-9|a-z|A-Z|ㄱ-ㅎ|ㅏ-ㅣ|가-힣|(|)|.|,|-]*")) {
+            return false;
+        } else return true;
     }
 }

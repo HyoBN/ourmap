@@ -49,6 +49,8 @@ public class FriendService {
         return friends;
     }
 
+
+
     public void acceptRequest(Long messageId){
         NewMessage requestMsg = newMessageRepository.findById(messageId).get();
         MessageTypes messageTypes = MessageTypes.FRIENDACCEPT;

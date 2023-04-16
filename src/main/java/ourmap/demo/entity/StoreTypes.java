@@ -8,7 +8,7 @@ public enum StoreTypes {
     RESTAURANT("식당","#FF6600"),
     BAR("술집","#66FFCC"),
     OTHER("기타","#006699");
-
+    
     private final String description;
     private final String color;
 

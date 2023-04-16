@@ -2,10 +2,7 @@ package ourmap.demo.service;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import ourmap.demo.controller.PostForm;
-import ourmap.demo.controller.TipForm;
 import ourmap.demo.entity.Member;
-import ourmap.demo.entity.Post;
 import ourmap.demo.entity.Tip;
 import ourmap.demo.repository.TipRepository;
 
@@ -34,20 +31,18 @@ public class TipService {
 
     public List<Tip> findByWriter(Member writer){return tipRepository.findByWriterId(writer.getId());}
 
-    public boolean isExistTip(TipForm tipForm) {
-        try {
-            Tip tip = tipRepository.findByComment(tipForm.getComment()).get();
-
-        } catch (NoSuchElementException e) {
+    public boolean lengthOver(String comment) {
+        int len = comment.length();
+        if (5 <= len && len <= 100) {
             return false;
         }
-        return true;
+        else return true;
     }
 
-    public boolean isTooLongTip(TipForm tipForm) {
-        if(tipForm.getComment().length()>101){
-            return true;
-        }
-        return false;
+    public String tipPostingCheck(String comment) {
+        if (lengthOver(comment)) {
+            return "tipLengthOver";
+        } else return "ok";
     }
+
 }

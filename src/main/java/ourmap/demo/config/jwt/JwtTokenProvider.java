@@ -5,6 +5,7 @@ import io.jsonwebtoken.Jws;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -20,9 +21,10 @@ import java.util.List;
 @RequiredArgsConstructor
 @Component
 public class JwtTokenProvider {
-    private String secretKey = "eaorehnieabnilebilebai";
+    @Value("{jwt-secret-key}")
+    private String secretKey;
 
-    private long tokenValidTime = 30 * 60 * 1000L;
+    private long tokenValidTime = 3 * 60 * 60 * 1000L;
     private final UserDetailsService userDetailsService;
 
     @PostConstruct
@@ -30,9 +32,9 @@ public class JwtTokenProvider {
         secretKey = Base64.getEncoder().encodeToString(secretKey.getBytes());
     }
 
-    public String createToken(String userPk/*, List<String> roles*/){
+    public String createToken(String userPk, String provider){
         Claims claims = Jwts.claims().setSubject(userPk);
-        //claims.put("roles", roles);
+        claims.put("provider", provider);
         Date now = new Date();
         return Jwts.builder()
                 .setClaims(claims)
@@ -53,7 +55,6 @@ public class JwtTokenProvider {
 
     public String resolveToken(HttpServletRequest request) {
 
-        //return request.getHeader("X-AUTH-TOKEN");
         return request.getHeader("Authorization");
     }
     public boolean validateToken(String jwtToken) {

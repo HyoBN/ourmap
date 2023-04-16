@@ -2,7 +2,7 @@ package ourmap.demo.service;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import ourmap.demo.controller.MessageForm;
+import ourmap.demo.dto.MessageForm;
 import ourmap.demo.entity.Member;
 import ourmap.demo.entity.MessageTypes;
 import ourmap.demo.entity.NewMessage;
@@ -13,7 +13,6 @@ import ourmap.demo.repository.OldMessageRepository;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor

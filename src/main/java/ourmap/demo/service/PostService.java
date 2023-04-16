@@ -1,8 +1,8 @@
 package ourmap.demo.service;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import ourmap.demo.controller.PostForm;
-import ourmap.demo.controller.PostResponseDTO;
+import ourmap.demo.dto.PostRequestDTO;
+import ourmap.demo.dto.PostResponseDTO;
 import ourmap.demo.entity.Member;
 import ourmap.demo.entity.Post;
 import ourmap.demo.entity.StoreTypes;
@@ -25,9 +25,19 @@ public class PostService {
         return postRepository.findById(id).get();
     }
 
-    public List<PostResponseDTO> findByNameContains(Member member, String name) {
+//    public List<PostResponseDTO> findByNameContains(Member member, String name) {
+//        List<PostResponseDTO> containsNamePostDTO = new ArrayList<>();
+//        for (PostResponseDTO postResponseDTO : getFriendsPostDTO(member)) {
+//            if (postResponseDTO.getStoreName().contains(name)) {
+//                containsNamePostDTO.add(postResponseDTO);
+//            }
+//        }
+//        return containsNamePostDTO;
+//    }
+
+    public List<PostResponseDTO> findByName(List<PostResponseDTO> posts, String name) {
         List<PostResponseDTO> containsNamePostDTO = new ArrayList<>();
-        for (PostResponseDTO postResponseDTO : getFriendsPostDTO(member)) {
+        for (PostResponseDTO postResponseDTO : posts) {
             if (postResponseDTO.getStoreName().contains(name)) {
                 containsNamePostDTO.add(postResponseDTO);
             }
@@ -35,10 +45,20 @@ public class PostService {
         return containsNamePostDTO;
     }
 
-    public List<PostResponseDTO> findByStoreType(Member member, String type) {
+//    public List<PostResponseDTO> findByStoreType(Member member, String type) {
+//        List<PostResponseDTO> categoryPostDTO = new ArrayList<>();
+//        for (PostResponseDTO postResponseDTO : getFriendsPostDTO(member)) {
+//            if (postResponseDTO.getStoreType().equals(StoreTypes.valueOf(type))) {
+//                categoryPostDTO.add(postResponseDTO);
+//            }
+//        }
+//        return categoryPostDTO;
+//    }
+
+    public List<PostResponseDTO> findByStoreTypes(List<PostResponseDTO> posts, String category) {
         List<PostResponseDTO> categoryPostDTO = new ArrayList<>();
-        for (PostResponseDTO postResponseDTO : getFriendsPostDTO(member)) {
-            if (postResponseDTO.getStoreType().equals(StoreTypes.valueOf(type))) {
+        for (PostResponseDTO postResponseDTO : posts) {
+            if (postResponseDTO.getStoreType().equals(StoreTypes.valueOf(category))) {
                 categoryPostDTO.add(postResponseDTO);
             }
         }
@@ -49,7 +69,6 @@ public class PostService {
         List<Member> tipWriter = new ArrayList<>();
         tipWriter.add(member);
         tipWriter.addAll(friendService.findFriends(member));
-
         List<Tip> tips = new ArrayList<>();
         for (Member writer : tipWriter) {
             tips.addAll(tipService.findByWriter(writer));
@@ -76,19 +95,32 @@ public class PostService {
         return postDTOs;
     }
 
-    public boolean isExistPost(PostForm postForm) {
+    public boolean isExistPost(PostRequestDTO postRequestDTO) {
         try {
-            Post post = postRepository.findByStoreNameAndStoreType(postForm.getStoreName(), postForm.getStoreType()).get();
+            Post post = postRepository.findByStoreNameAndStoreType(postRequestDTO.getStoreName(), postRequestDTO.getStoreType()).get();
         } catch (NoSuchElementException e) {
             return false;
         }
         return true;
     }
-
-    public boolean isTooLongName(PostForm postForm) {
-        if(postForm.getStoreName().length()>20){
-            return true;
+    public boolean lengthOver(PostRequestDTO postRequestDTO) {
+        int len = postRequestDTO.getStoreName().length();
+        if (0 < len && len < 20) {
+            return false;
         }
-        return false;
+        else return true;
+    }
+
+    public boolean existSpecialWords(String word) {
+        if (!word.matches("[0-9|a-z|A-Z|ㄱ-ㅎ|ㅏ-ㅣ|가-힣|(|)|,|.| |-]*")) {
+            return true;
+        } else return false;
+    }
+    public String postingCheck(PostRequestDTO postRequestDTO) {
+        if (existSpecialWords(postRequestDTO.getStoreName())) {
+            return "existSpecialWord";
+        } else if (lengthOver(postRequestDTO)) {
+            return "storeNameLengthOver";
+        } else return "ok";
     }
 }

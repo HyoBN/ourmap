@@ -1,18 +1,15 @@
-package ourmap.demo.controller;
+package ourmap.demo.dto;
 
-import com.sun.istack.NotNull;
 import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 import ourmap.demo.entity.StoreTypes;
-import ourmap.demo.entity.Tip;
-
-import java.util.ArrayList;
 import java.util.List;
 
+@RequiredArgsConstructor
 @Getter @Setter
-public class PostForm {
-    @NotNull
+public class PostRequestDTO {
     private String storeName;
     private StoreTypes storeType;
-    private String tip;
+    private List<String> tips;
 }

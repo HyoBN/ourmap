@@ -1,4 +1,4 @@
-package ourmap.demo.controller;
+package ourmap.demo.dto;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
