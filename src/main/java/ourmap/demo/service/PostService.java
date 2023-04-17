@@ -81,6 +81,10 @@ public class PostService {
         return postDTOs;
     }
 
+    public void deletePost(Post post) {
+        postRepository.delete(findPostById(post.getId()));
+    }
+
     public boolean isExistPost(PostRequestDTO postRequestDTO) {
         try {
             Post post = postRepository.findByStoreNameAndStoreType(postRequestDTO.getStoreName(), postRequestDTO.getStoreType()).get();

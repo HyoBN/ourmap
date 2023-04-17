@@ -99,6 +99,9 @@ public class PostRestController {
         Tip tip = tipService.findById(id);
         if (tip.getWriter().getId() == member.getId()) {
             tipService.deleteTip(id);
+            if(tipService.CountTipOfPost(tip.getPost())==0){
+                postService.deletePost(tip.getPost());
+            }
             return new ResponseEntity(HttpStatus.OK);
         } else {
             return new ResponseEntity(HttpStatus.FORBIDDEN);

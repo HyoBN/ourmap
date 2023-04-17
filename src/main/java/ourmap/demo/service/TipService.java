@@ -3,9 +3,11 @@ package ourmap.demo.service;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import ourmap.demo.entity.Member;
+import ourmap.demo.entity.Post;
 import ourmap.demo.entity.Tip;
 import ourmap.demo.repository.TipRepository;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
 
@@ -25,10 +27,11 @@ public class TipService {
     public List<Tip> findTips(){
         return tipRepository.findAll();
     }
-    public List<Tip> findTipOfPost(Long postId) {
-        return tipRepository.findByPost_Id(postId);
-    }
 
+    public int CountTipOfPost(Post post){
+        List<Tip> tipsOfPost = tipRepository.findByPost_Id(post.getId());
+        return tipsOfPost.size();
+    }
     public List<Tip> findByWriter(Member writer){return tipRepository.findByWriterId(writer.getId());}
 
     public boolean lengthOver(String comment) {
