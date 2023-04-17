@@ -10,7 +10,7 @@ import java.util.List;
 @Entity
 @NoArgsConstructor
 @ToString(of={"id","storeName"})
-public class Post {
+public class Post implements Comparable<Post>{
 
     @Id
     @GeneratedValue(strategy= GenerationType.IDENTITY)
@@ -28,6 +28,11 @@ public class Post {
     @JsonIgnore
     @OneToMany(mappedBy = "post", cascade = CascadeType.PERSIST)
     private List<Tip> tips = new ArrayList<>();
+
+    @Override
+    public int compareTo(Post other) {
+        return storeName.compareTo(other.storeName);
+    }
 
     public Post(String storeName, StoreTypes storeType, Member writer) {
         this.storeName = storeName;

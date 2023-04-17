@@ -25,16 +25,6 @@ public class PostService {
         return postRepository.findById(id).get();
     }
 
-//    public List<PostResponseDTO> findByNameContains(Member member, String name) {
-//        List<PostResponseDTO> containsNamePostDTO = new ArrayList<>();
-//        for (PostResponseDTO postResponseDTO : getFriendsPostDTO(member)) {
-//            if (postResponseDTO.getStoreName().contains(name)) {
-//                containsNamePostDTO.add(postResponseDTO);
-//            }
-//        }
-//        return containsNamePostDTO;
-//    }
-
     public List<PostResponseDTO> findByName(List<PostResponseDTO> posts, String name) {
         List<PostResponseDTO> containsNamePostDTO = new ArrayList<>();
         for (PostResponseDTO postResponseDTO : posts) {
@@ -42,18 +32,9 @@ public class PostService {
                 containsNamePostDTO.add(postResponseDTO);
             }
         }
+        Collections.sort(containsNamePostDTO);
         return containsNamePostDTO;
     }
-
-//    public List<PostResponseDTO> findByStoreType(Member member, String type) {
-//        List<PostResponseDTO> categoryPostDTO = new ArrayList<>();
-//        for (PostResponseDTO postResponseDTO : getFriendsPostDTO(member)) {
-//            if (postResponseDTO.getStoreType().equals(StoreTypes.valueOf(type))) {
-//                categoryPostDTO.add(postResponseDTO);
-//            }
-//        }
-//        return categoryPostDTO;
-//    }
 
     public List<PostResponseDTO> findByStoreTypes(List<PostResponseDTO> posts, String category) {
         List<PostResponseDTO> categoryPostDTO = new ArrayList<>();
@@ -62,6 +43,7 @@ public class PostService {
                 categoryPostDTO.add(postResponseDTO);
             }
         }
+        Collections.sort(categoryPostDTO);
         return categoryPostDTO;
     }
 
@@ -84,6 +66,7 @@ public class PostService {
             PostResponseDTO postResponseDTO = new PostResponseDTO(post);
             postDTOs.add(postResponseDTO);
         }
+        Collections.sort(postDTOs);
 
         for (Tip tip : tips) {
             for (PostResponseDTO postResponseDTO : postDTOs) {
@@ -91,6 +74,9 @@ public class PostService {
                     postResponseDTO.tips.add(tip);
                 }
             }
+        }
+        for (PostResponseDTO postResponseDTO : postDTOs) {
+            Collections.sort(postResponseDTO.tips);
         }
         return postDTOs;
     }

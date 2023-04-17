@@ -20,7 +20,7 @@ import java.util.stream.Collectors;
 @Builder
 @Data
 @Table(name = "member")
-public class Member implements UserDetails {
+public class Member implements UserDetails,Comparable<Member> {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "member_id")
@@ -38,22 +38,17 @@ public class Member implements UserDetails {
     @Column(name = "nickname", nullable = true, unique = true)
     private String nickname;
 
-//    @ElementCollection(fetch = FetchType.EAGER)
-//    @Builder.Default
-//    private List<String> roles = new ArrayList<>();
-
+    @Override
+    public int compareTo(Member other) {
+        return nickname.compareTo(other.getNickname());
+    }
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return null;
     }
 
-//    @Override
-//    public Collection<? extends GrantedAuthority> getAuthorities() {
-//        return this.roles.stream()
-//                .map(SimpleGrantedAuthority::new)
-//                .collect(Collectors.toList());
-//    }
+
     @Override
     public String getUsername() {
         return email;

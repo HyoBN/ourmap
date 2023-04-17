@@ -7,12 +7,13 @@ import lombok.NoArgsConstructor;
 import lombok.ToString;
 
 import javax.persistence.*;
+import java.util.Comparator;
 
 @Getter
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @ToString(of={"post","comment"})
-public class Tip {
+public class Tip implements Comparable<Tip> {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -23,6 +24,10 @@ public class Tip {
     @JoinColumn(name = "post_id")
     private Post post;
     private String comment;
+
+    public int compareTo(Tip other) {
+        return id.compareTo(other.getId());
+    }
 
     @ManyToOne(cascade = CascadeType.PERSIST)
     @JoinColumn(name = "writer_id")

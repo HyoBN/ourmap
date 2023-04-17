@@ -5,17 +5,15 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ourmap.demo.entity.*;
 import ourmap.demo.repository.FriendRepository;
-import ourmap.demo.repository.MemberRepository;
 import ourmap.demo.repository.NewMessageRepository;
 import ourmap.demo.repository.OldMessageRepository;
-
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 @Service
 @RequiredArgsConstructor
 public class FriendService {
-
     private final MessageService messageService;
     private final FriendRepository friendRepository;
     private final NewMessageRepository newMessageRepository;
@@ -46,10 +44,9 @@ public class FriendService {
         for (Friend friend : friendRepository.findByMember1Id(member.getId())) {
             friends.add(friend.getMember2());
         }
+        Collections.sort(friends);
         return friends;
     }
-
-
 
     public void acceptRequest(Long messageId){
         NewMessage requestMsg = newMessageRepository.findById(messageId).get();
