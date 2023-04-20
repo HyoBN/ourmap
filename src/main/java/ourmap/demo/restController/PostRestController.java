@@ -98,7 +98,7 @@ public class PostRestController {
         Member member = memberService.findMemberByEmailAndProvider(memberEmail, "kakao");
         Tip tip = tipService.findById(id);
         if (tip.getWriter().getId() == member.getId()) {
-            tipService.deleteTip(id);
+            tipService.deleteTip(id);   
             if(tipService.CountTipOfPost(tip.getPost())==0){
                 postService.deletePost(tip.getPost());
             }

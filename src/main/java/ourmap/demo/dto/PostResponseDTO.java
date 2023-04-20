@@ -14,13 +14,18 @@ import java.util.List;
 
 @Getter
 @NoArgsConstructor
-public class PostResponseDTO {
+public class PostResponseDTO implements Comparable<PostResponseDTO> {
     @Id
-    private long id;
+    private Long id;
     private String storeName;
     @Enumerated(value = EnumType.STRING)
     private StoreTypes storeType;
     public List<Tip> tips = new ArrayList<>();
+
+    @Override
+    public int compareTo(PostResponseDTO other) {
+        return storeName.compareTo(other.getStoreName());
+    }
 
     public PostResponseDTO(Post post) {
         this.id=post.getId();

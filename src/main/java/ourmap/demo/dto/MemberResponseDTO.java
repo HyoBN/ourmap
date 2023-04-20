@@ -11,11 +11,8 @@ import javax.persistence.Id;
 public class MemberResponseDTO {
     @Id
     private Long id;
-
     private String nickname;
-
     private String email;
-
     private String provider;
 
     public MemberResponseDTO(Member member) {
