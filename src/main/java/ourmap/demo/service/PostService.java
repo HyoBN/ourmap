@@ -25,6 +25,11 @@ public class PostService {
         return postRepository.findById(id).get();
     }
 
+    public Post findByStoreNameAndStoreType(PostRequestDTO postRequestDTO) {
+        Post post = postRepository.findByStoreNameAndStoreType(postRequestDTO.getStoreName(), postRequestDTO.getStoreType()).get();
+        return post;
+    }
+
     public List<PostResponseDTO> findByName(List<PostResponseDTO> posts, String name) {
         List<PostResponseDTO> containsNamePostDTO = new ArrayList<>();
         for (PostResponseDTO postResponseDTO : posts) {
