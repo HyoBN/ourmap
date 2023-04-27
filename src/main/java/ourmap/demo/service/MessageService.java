@@ -44,4 +44,14 @@ public class MessageService {
         }
         return true;
     }
+
+
+    public boolean isRequestSender(Member sender, Member receiver, MessageTypes messageTypes) {
+        try {
+            oldMessageRepository.findBySenderIdAndReceiverIdAndMessageType(sender.getId(), receiver.getId(), messageTypes).get();
+            return true;
+        } catch (NoSuchElementException e) {
+            return false;
+        }
+    }
 }

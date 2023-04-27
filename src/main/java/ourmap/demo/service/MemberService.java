@@ -14,6 +14,9 @@ import java.util.Optional;
 public class MemberService {
     private final MemberRepository memberRepository;
 
+    public Member findById(Long Id){
+        return memberRepository.findById(Id).get();
+    }
     public Member findMemberByEmailAndProvider(String email, String provider) {
         return memberRepository.findByEmailAndProvider(email, provider).get();
     }

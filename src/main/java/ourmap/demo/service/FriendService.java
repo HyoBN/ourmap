@@ -70,4 +70,19 @@ public class FriendService {
         oldMessageRepository.save(oldMessage);
         newMessageRepository.deleteById(messageId);
     }
+
+    public void deleteFriend(Member m1, Member m2){
+        List<Friend> friendList = new ArrayList<>();
+        friendList.addAll(friendRepository.findByMember1Id(m1.getId()));
+        friendList.addAll(friendRepository.findByMember2Id(m1.getId()));
+        for (Friend friend : friendList) {
+            if((friend.getMember1().equals(m1) && friend.getMember2().equals(m2))
+                    || (friend.getMember1().equals(m2) && friend.getMember2().equals(m1))
+            ){
+                friendRepository.delete(friend);
+            }
+        }
+        OldMessage oldMessage = new OldMessage(m1, m2, MessageTypes.FRIENDDELETE);
+        oldMessageRepository.save(oldMessage);
+    }
 }

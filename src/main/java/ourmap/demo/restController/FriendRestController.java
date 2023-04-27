@@ -6,8 +6,11 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import ourmap.demo.config.jwt.SecurityUtil;
 import ourmap.demo.entity.Member;
+import ourmap.demo.entity.MessageTypes;
+import ourmap.demo.entity.NewMessage;
 import ourmap.demo.service.FriendService;
 import ourmap.demo.service.MemberService;
+import ourmap.demo.service.MessageService;
 
 import java.util.List;
 import java.util.Map;
@@ -20,6 +23,7 @@ public class FriendRestController {
 
     private final MemberService memberService;
     private final FriendService friendService;
+    private final MessageService messageService;
 
     @GetMapping("/friends")
     public ResponseEntity friends(){
@@ -58,6 +62,15 @@ public class FriendRestController {
     @PostMapping("/friendReject")
     public ResponseEntity rejectFriendRequest(Long messageId) {
         friendService.rejectRequest(messageId);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    @DeleteMapping("/friend/{memberId}")
+    public ResponseEntity deleteFriend(@PathVariable Long memberId) {
+        String memberEmail = SecurityUtil.getMemberEmail();
+        Member member = memberService.findMemberByEmailAndProvider(memberEmail, "kakao");
+        Member friend = memberService.findById(memberId);
+        friendService.deleteFriend(member, friend);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 }

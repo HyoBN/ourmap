@@ -7,7 +7,8 @@ public enum MessageTypes {
 
     FRIENDREQUEST("친구신청"),
     FRIENDREJECT("친구거절"),
-    FRIENDACCEPT("친구수락");
+    FRIENDACCEPT("친구수락"),
+    FRIENDDELETE("친구삭제");
     private final String description;
 
     MessageTypes(String description) {
